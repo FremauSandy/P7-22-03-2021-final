@@ -49,7 +49,7 @@ export default {
 	methods: {
 		//utilisateur
 		getUser() {
-			// droits admin ou auteur: permet la suppression des posts
+			// droits admin ou auteur: permet la suppression des commentaires
 			const id = localStorage.getItem("userId");
 			axios
 				.get("http://localhost:3000/users/" + id)

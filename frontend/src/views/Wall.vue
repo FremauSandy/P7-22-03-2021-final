@@ -36,12 +36,17 @@ export default {
 	emits: ["add-post", "delete-post", "image-select"],
 	data() {
 		return {
+			user: {
+				userId: localStorage.getItem("userId"),
+				username: localStorage.getItem("username"),
+				isadmin: localStorage.getItem("isAdmin")
+			},
 			posts: [],
 			userId: localStorage.getItem("userId")
 		};
 	},
 	methods: {
-		//Uutilisateur
+		//Utilisateur
 		ifConnect() {
 			const token = localStorage.getItem("jwt");
 			this.userId = localStorage.getItem("userId");
@@ -51,6 +56,19 @@ export default {
 				this.isLogged = false;
 			}
 		},
+		getUser() {
+			const id = localStorage.getItem("userId");
+			axios
+				.get("http://localhost:3000/users/" + id)
+				.then(res => {
+					this.user = res.data;
+					console.log(res.data);
+				})
+				.catch(e => {
+					console.log(e);
+				});
+		},
+		//publications
 		getAllPosts() {
 			axios
 				.get("http://localhost:3000/wall/posts/all")
@@ -60,7 +78,7 @@ export default {
 				})
 				.catch(error => console.log({ error }));
 		},
-		//publications
+
 		imageSelect(event) {
 			this.post.image = event.target.files[0];
 			console.log(this.post.image);
@@ -106,6 +124,7 @@ export default {
 	},
 	mounted() {
 		this.userId;
+		this.getUser;
 		this.getAllPosts();
 	}
 };
