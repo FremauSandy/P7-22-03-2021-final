@@ -1,0 +1,17 @@
+POST http://localhost:3000/users/sign
+Content-Type: application/json
+
+{
+    "username": "testeur",
+    "email": "testeur@gmail.com", 
+    "password": "Testons"
+}
+###
+POST http://localhost:3000/users/log
+Content-Type: application/json
+
+{
+    "username": "testeur",
+    "email": "testeur@gmail.com", 
+    "password": "Testons"
+}

@@ -1,0 +1,4 @@
+BDD_USER="placer votre user database"
+BDD_PASS="saisissez votre pass database"
+BDD_DATA="indiquer votre database"
+SECRET_TOKEN="Token de votre choix"

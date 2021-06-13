@@ -1,0 +1,10 @@
+backend/nodes_modules
+backend/.env
+backend/config
+
+frontend/nodes_modules
+frontend/.gitignore
+frontend/.env
+
+ressources
+P7-22-03-2021
