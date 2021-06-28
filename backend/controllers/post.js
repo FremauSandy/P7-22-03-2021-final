@@ -31,8 +31,7 @@ exports.getAllPosts = (req, res, next) => {
 				model: Comment,
 				include: [
 					{
-						model: User,
-						attributes: ["username"]
+						model: User
 					}
 				]
 			},

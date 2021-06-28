@@ -2,17 +2,17 @@
 	<div id="comment">
 		<div class="infos-comment">
 			<div class="comment-photo">
-				<!-- {{ writeBy | truncate(1) }} -->
+				{{ writeBy | truncate(1) }}
 			</div>
 			<div class="content">
-				<p class="comment-author"></p>
+				<p class="comment-author">{{ writeBy }}</p>
 				<div class="content-comment">{{ comment.content }}</div>
 			</div>
 		</div>
 		<button
 			class="dlt-com"
 			@click="$emit('delete-comment', comment.id)"
-			v-if="comment.username == user.username || user.isadmin == true"
+			v-if="comment.userId == comment.user.id || user.isadmin == true"
 		>
 			<i class="fas fa-trash"></i>
 		</button>
@@ -20,8 +20,6 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
 	name: "Comment",
 	props: {
@@ -43,28 +41,10 @@ export default {
 				userId: localStorage.getItem("userId"),
 				username: localStorage.getItem("username"),
 				isadmin: localStorage.getItem("isAdmin")
-			}
+			},
 			//auteur
-			//writeBy: this.comment.username
+			writeBy: this.comment.user.username
 		};
-	},
-	methods: {
-		//utilisateur
-		getUser() {
-			// droits admin ou auteur: permet la suppression des commentaires
-			const id = localStorage.getItem("userId");
-			axios
-				.get("http://localhost:3000/users/" + id)
-				.then(res => {
-					this.user = res.data;
-				})
-				.catch(e => {
-					console.log(e);
-				});
-		}
-	},
-	mounted() {
-		this.getUser;
 	}
 };
 </script>

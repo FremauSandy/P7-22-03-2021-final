@@ -5,6 +5,10 @@
 			<Profileuser />
 			<Addpost @add-post="addPost" />
 		</div>
+		<span class="empty-wall" v-if="emptyWall == true">
+			Aucune publication n'est à l'honneur. <br />
+			Soyer le premier a publier !
+		</span>
 		<div class="wall-post" :key="post.id" v-for="post in posts">
 			<Post @delete-post="deletePost" @image-select="imageSelect" :post="post" />
 		</div>
@@ -42,6 +46,7 @@ export default {
 				isadmin: localStorage.getItem("isAdmin")
 			},
 			posts: [],
+			emptyWall: true,
 			userId: localStorage.getItem("userId")
 		};
 	},
@@ -75,10 +80,12 @@ export default {
 				.then(res => {
 					this.posts = res.data;
 					console.log(res.data);
+					if (this.posts.length !== 0) {
+						this.emptyWall = false;
+					}
 				})
 				.catch(error => console.log({ error }));
 		},
-
 		imageSelect(event) {
 			this.post.image = event.target.files[0];
 			console.log(this.post.image);
@@ -101,7 +108,7 @@ export default {
 				.then(res => {
 					console.log(res);
 					alert("Votre publication à bien été enregistrée !");
-					document.location.reload();
+					document.location.reload(); // a changer !!  push dans tab posts!
 				})
 				.catch(error => console.log(error.response));
 		},
@@ -117,7 +124,10 @@ export default {
 				})
 				.then(() => {
 					alert("Votre publication à bien été supprimée");
-					document.location.reload();
+					if (this.posts.length == 0) {
+						this.emptyWall = true;
+					}
+					document.location.reload(); // changer push dans tab posts
 				})
 				.catch(error => console.log(error));
 		}
@@ -161,6 +171,14 @@ export default {
 		align-items: center;
 		justify-content: center;
 		flex-direction: column;
+	}
+	.empty-wall {
+		text-align: center;
+		text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+		margin-top: 20px;
+		font-size: 20px;
+		font-weight: 700;
+		color: white;
 	}
 }
 </style>

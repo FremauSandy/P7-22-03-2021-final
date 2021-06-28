@@ -19,7 +19,13 @@
 				>
 			</label>
 			<label for="email">
-				<input type="email" name="email" placeholder="E-mail" v-model="email" />
+				<input
+					type="email"
+					name="email"
+					placeholder="E-mail"
+					v-model="email"
+					title="Veuillez renseigner une adresse valide"
+				/>
 				<span
 					class="error"
 					v-if="(!$v.email.required || !$v.email.email) && $v.email.$dirty && submited"
@@ -30,6 +36,8 @@
 				<input
 					type="password"
 					name="password"
+					title="Votre mot de passe doit contenir au minimum 8 caractères, une majuscule, un
+					chiffre et un caractère spécial."
 					placeholder="Mot de passe"
 					v-model="password"
 				/>

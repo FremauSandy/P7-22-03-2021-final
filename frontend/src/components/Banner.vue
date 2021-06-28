@@ -36,6 +36,7 @@ export default {
 	}
 	.text-banner {
 		margin-left: 20px;
+		text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 		.welcome {
 			color: white;
 			margin: 30px 0 0 0;

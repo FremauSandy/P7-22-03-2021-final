@@ -5,7 +5,13 @@
 		<form class="right" v-on:submit.prevent="login()">
 			<h1 class="connect-title">Se connecter</h1>
 			<label for="email">
-				<input type="email" name="email" placeholder="E-mail" v-model="email" />
+				<input
+					type="email"
+					name="email"
+					placeholder="E-mail"
+					v-model="email"
+					title="Veuillez renseigner une adresse valide"
+				/>
 				<span
 					class="error"
 					v-if="(!$v.email.required || !$v.email.email) && $v.email.$dirty && submited"
@@ -18,11 +24,18 @@
 					name="password"
 					placeholder="Mot de passe"
 					v-model="password"
+					title="Veuillez renseigner un mot de passe valide"
 				/>
 				<span class="error" v-if="!$v.password.required && $v.password.$dirty && submited"
 					>Veuillez saisir votre mot de passe
 				</span>
 			</label>
+			<span class="connection-error" v-if="idPassError == true"
+				>Votre identifiant ou mot de passe est incorrect
+			</span>
+			<span class="connection-error" v-if="connectionError == true"
+				>Ce compte n'existe pas!</span
+			>
 			<button type="submit" class="connection">
 				Connexion
 			</button>
@@ -46,7 +59,9 @@ export default {
 			email: "",
 			password: "",
 			submited: false,
-			contentError: false
+			contentError: false,
+			connectionError: false,
+			idPassError: false
 		};
 	},
 	validations: {
@@ -85,7 +100,14 @@ export default {
 					.catch(error => {
 						console.log({ error });
 						this.contentError = true;
-						//erreur 404 = utilisateur inconnu
+						if (error.response.status === 404) {
+							console.log("Ce compte n'existe pas!");
+							this.connectionError = true;
+						}
+						if (error.response.status === 401) {
+							console.log("Votre identifiant/mot de passe est incorrect ");
+							this.idPassError = true;
+						}
 						//erreur 401 = mauvais identifiant et/ou mot de passe
 					});
 			}
@@ -164,6 +186,7 @@ export default {
 			cursor: pointer;
 		}
 	}
+	.connection-error,
 	.error {
 		color: #d15159;
 		font-size: 10px;
