@@ -30,6 +30,12 @@ const router = new Router({
 			name: "Userprofil",
 			component: () => import("../views/Userprofil"),
 			meta: { requiresAuth: true }
+		},
+		//acces aux profil d'un autre utilisateur
+		{
+			path: "/users/profile/",
+			name: "Randomprofile",
+			component: () => import("../views/Randomprofile")
 		}
 	]
 });

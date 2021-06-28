@@ -108,7 +108,6 @@ export default {
 							console.log("Votre identifiant/mot de passe est incorrect ");
 							this.idPassError = true;
 						}
-						//erreur 401 = mauvais identifiant et/ou mot de passe
 					});
 			}
 		}

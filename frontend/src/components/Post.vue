@@ -5,7 +5,11 @@
 		<div class="model-profil">
 			<div class="author">
 				<div class="model-picture">{{ author | truncate(1) }}</div>
-				<p>{{ post.user.username }}</p>
+				<a class="pseudo">
+					<router-link :to="{ name: 'Randomprofile' }">
+						{{ post.user.username }}</router-link
+					>
+				</a>
 			</div>
 			<!-- si admin ou auteur -->
 			<div class="action" v-if="post.userId == user.id || user.isadmin == true">
@@ -57,9 +61,9 @@ export default {
 			},
 			//publication
 			author: this.post.user.username,
+			//postId: this.post.id,
 			//commentaires
-			//Comments: [],
-			postId: this.post.id,
+			Comments: [],
 			//envoi
 			showForm: true,
 			submitted: false
@@ -199,6 +203,10 @@ export default {
 		.author {
 			display: flex;
 			flex-direction: row;
+			.pseudo {
+				color: white;
+				margin-top: 15px;
+			}
 		}
 		h1 {
 			font-size: 16px;

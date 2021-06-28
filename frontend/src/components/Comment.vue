@@ -10,9 +10,9 @@
 			</div>
 		</div>
 		<button
+			v-if="comment.userId == comment.user.id || user.isadmin == true"
 			class="dlt-com"
 			@click="$emit('delete-comment', comment.id)"
-			v-if="comment.userId == comment.user.id || user.isadmin == true"
 		>
 			<i class="fas fa-trash"></i>
 		</button>

@@ -1,7 +1,7 @@
 <template>
 	<div class="card-profile">
 		<!-- action Compte -->
-		<div v-if="user.userId == user.userId || user.isAdmin == true" class="btn-inner">
+		<div v-if="user.userId == user.userId || user.isadmin == true" class="btn-inner">
 			<!-- si admin -->
 			<div class="mark-admin" v-if="user.isadmin == true">
 				<i class="fas fa-crown"></i>

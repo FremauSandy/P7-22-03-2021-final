@@ -108,7 +108,7 @@ export default {
 				.then(res => {
 					console.log(res);
 					alert("Votre publication à bien été enregistrée !");
-					document.location.reload(); // a changer !!  push dans tab posts!
+					document.location.reload(); //a changer !!  push dans tab posts!
 				})
 				.catch(error => console.log(error.response));
 		},

@@ -73,7 +73,6 @@ export default {
 	border-radius: 0 0 10px 10px;
 	margin-bottom: 10px;
 	border-top: 2px solid #42b983;
-
 	.add-content-com {
 		display: flex;
 		flex-direction: row;
@@ -99,6 +98,17 @@ export default {
 			padding: 10px;
 			border-radius: 30px;
 			margin: 10px 0 10px 0;
+		}
+		@media (max-width: 700px) {
+			.user-picture-com {
+				visibility: hidden;
+				margin: 0px;
+				width: 0;
+				height: 0;
+			}
+			.add-commentary {
+				margin-left: 15px;
+			}
 		}
 		.btn-valid {
 			display: flex;
