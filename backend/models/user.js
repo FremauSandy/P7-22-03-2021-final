@@ -2,10 +2,6 @@
 const db = require("../middleware/dbConfig");
 const { Sequelize } = require("sequelize");
 
-/*IMPORT MODELS*/
-// const Post = require("./post");
-// const Comment = require("./comment");
-
 /*DEFINITION USER*/
 const User = db.define("user", {
 	email: {
@@ -39,5 +35,6 @@ const User = db.define("user", {
 });
 
 User.sync();
+//User.sync({ force: true });
 
 module.exports = User;

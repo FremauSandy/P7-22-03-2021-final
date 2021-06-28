@@ -26,8 +26,22 @@ exports.createPost = (req, res, next) => {
 /*TROUVER TOUTES LES PUBLICATIONS*/
 exports.getAllPosts = (req, res, next) => {
 	Post.findAll({
-		include: [Comment, User],
-		order: [["updatedAt", "desc"]]
+		include: [
+			{
+				model: Comment,
+				include: [
+					{
+						model: User,
+						attributes: ["username"]
+					}
+				]
+			},
+			User
+		],
+		order: [
+			["updatedAt", "desc"],
+			["createdAt", "DESC"]
+		]
 	})
 		.then(post => res.status(200).json(post))
 		.catch(error => res.status(404).json({ error }));

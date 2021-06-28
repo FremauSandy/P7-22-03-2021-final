@@ -7,7 +7,6 @@ const Comment = require("../models/comment");
 exports.createComment = (req, res, next) => {
 	const comment = req.file
 		? {
-				username: req.body.username,
 				postId: postId,
 				userId: req.token.userId,
 				content: req.body.content
@@ -22,35 +21,37 @@ exports.createComment = (req, res, next) => {
 
 /*RECHERCHER UN COMMENTAIRE*/
 exports.findOneComment = (req, res, next) => {
-	const id = req.params.id;
-	Comment.findByPk(id)
-		.then(data => {
-			res.send(data);
-		})
-		.catch(err => {
-			res.status(500).send({
-				message: "Problème de récupération du commentaire avec l'id=" + id
-			});
-		});
+	Comment.findOne({
+		where: { id: req.params.id },
+		include: [
+			{
+				model: User
+			}
+		],
+		order: [
+			["createdAt", "asc"],
+			["createdAt", "DESC"]
+		]
+	})
+		.then(post => res.status(200).json(post))
+		.catch(error => res.status(404).json({ error: "getOne error : " + error }));
 };
 
 /*RECHERCHER TOUS LES COMMENTAIRES*/
 exports.findAllComments = (req, res, next) => {
 	Comment.findAll({
-		include: [Post, User],
+		include: [
+			{
+				model: User
+			}
+		],
 		order: [
 			["updatedAt", "desc"],
 			["createdAt", "DESC"]
 		]
 	})
-		.then(data => {
-			res.send(data);
-		})
-		.catch(err => {
-			res.status(500).send({
-				message: err.message || "erreur lors de la récupération des Commentaires"
-			});
-		});
+		.then(comment => res.status(200).json(comment))
+		.catch(error => res.status(404).json({ error }));
 };
 
 /*MODIFIER UN COMMENTAIRE*/
@@ -59,13 +60,11 @@ exports.modifyComment = (req, res, next) => {
 	const modification = req.file
 		? {
 				userId: req.body.userId,
-				username: req.body.username,
 				postId: req.body.postId,
 				content: req.body.content
 		  }
 		: {
 				userId: req.body.userId,
-				username: req.body.username,
 				postId: req.body.postId,
 				content: req.body.content
 		  };

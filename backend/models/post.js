@@ -38,17 +38,17 @@ const Post = db.define("post", {
 	}
 });
 
-/*JOINTURES*/
-//commentaires
-Comment.belongsTo(Post, { foreignKey: "postId" });
-Comment.belongsTo(User, { foreignKey: "userId" });
-//publications
-Post.hasMany(Comment);
-Post.belongsTo(User, { foreignKey: "userId", onDelete: "cascade" });
-//utilisateurs
-User.hasMany(Comment, { foreignKey: "userId", onDelete: "cascade" });
-User.hasMany(Post);
+/*ASSOCIATIONS*/
+User.hasMany(Comment, { foreignKey: "userId" });
+Comment.belongsTo(User);
+
+Post.hasMany(Comment, { foreignKey: "postId" }); // work !
+Comment.belongsTo(Post);
+
+User.hasMany(Post, { foreignKey: "userId" }); // work !
+Post.belongsTo(User);
 
 Post.sync();
+//Post.sync({ force: true });
 
 module.exports = Post;

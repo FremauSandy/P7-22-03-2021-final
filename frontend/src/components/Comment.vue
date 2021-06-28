@@ -1,9 +1,11 @@
 <template>
 	<div id="comment">
 		<div class="infos-comment">
-			<div class="comment-photo">{{ writeBy | truncate(1) }}</div>
+			<div class="comment-photo">
+				<!-- {{ writeBy | truncate(1) }} -->
+			</div>
 			<div class="content">
-				<p class="comment-author">{{ comment.username }}</p>
+				<p class="comment-author"></p>
 				<div class="content-comment">{{ comment.content }}</div>
 			</div>
 		</div>
@@ -41,9 +43,9 @@ export default {
 				userId: localStorage.getItem("userId"),
 				username: localStorage.getItem("username"),
 				isadmin: localStorage.getItem("isAdmin")
-			},
+			}
 			//auteur
-			writeBy: this.comment.username
+			//writeBy: this.comment.username
 		};
 	},
 	methods: {

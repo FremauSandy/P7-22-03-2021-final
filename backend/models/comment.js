@@ -2,16 +2,8 @@
 const db = require("../middleware/dbConfig");
 const { Sequelize } = require("sequelize");
 
-/*IMPORT MODELS*/
-// const User = require("./user");
-// const Post = require("./post");
-
 /*DEFINITION COMMENTAIRE*/
 const Comment = db.define("Comment", {
-	username: {
-		type: Sequelize.STRING,
-		allowNull: false
-	},
 	content: {
 		type: Sequelize.TEXT,
 		allowNull: false
@@ -39,5 +31,6 @@ const Comment = db.define("Comment", {
 });
 
 Comment.sync();
+//Comment.sync({ force: true });
 
 module.exports = Comment;

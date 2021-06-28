@@ -4,7 +4,7 @@ const router = express.Router();
 
 /*IMPORT FONCTIONS*/
 const commentCtrl = require("../controllers/comment");
-const authCtrl = require("../middleware/authCom");
+const authCtrl = require("../middleware/auth");
 const regexCtrl = require("../middleware/regex");
 
 /*APPEL FONCTIONS*/
@@ -15,7 +15,7 @@ router.get("/:id", commentCtrl.findOneComment);
 router.get("/all", commentCtrl.findAllComments);
 //modification
 router.put("/:id", authCtrl, commentCtrl.modifyComment);
-// //supprimer
+//supprimer
 router.delete("/:id", authCtrl, commentCtrl.deleteComment);
 
 module.exports = router;

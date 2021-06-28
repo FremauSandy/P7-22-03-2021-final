@@ -6,7 +6,6 @@ const router = express.Router();
 const userCtrl = require("../controllers/user");
 const regexCtrl = require("../middleware/regex");
 const authCtrl = require("../middleware/auth");
-const multerCtrl = require("../middleware/multer-config");
 // const bouncer = require("express-bouncer")(120000, 1.8e6, 5);
 
 /*LIMITE CONNECTIONS*/
