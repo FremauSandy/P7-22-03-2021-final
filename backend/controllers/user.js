@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 
 /*IMPORT MODEL*/
 const User = require("../models/user");
+const Post = require("../models/post");
+const { models } = require("../middleware/dbConfig");
 
 /*ENREGISTRER UN NOUVEL UTILISATEUR*/
 exports.signup = (req, res) => {
@@ -107,26 +109,32 @@ exports.modifyUser = (req, res, next) => {
 			});
 	});
 };
+
 /*SUPPRIMER UN UTILISATEUR*/
 exports.deleteUser = (req, res, next) => {
-	const id = req.params.id;
-	User.destroy({
-		where: { id: id }
+	User.findOne({
+		where: { id: req.params.id }
 	})
-		.then(num => {
-			if (num == 1) {
-				res.send({
-					message: "Utilisateur supprimé avec succès!"
+		.then(user => {
+			if (user !== null) {
+				Post.destroy({ where: { userId: user.id } }).then(() => {
+					console.log(
+						"Toutes les publications de cet utilisateur ont bien été supprimées!"
+					);
 				});
+				User.destroy({ where: { id: user.id } }).then(() =>
+					res.send({ message: "Utilisateur supprimé avec succès!" })
+				);
 			} else {
 				res.send({
-					message: `Impossible de supprimer id=${id}. `
+					message:
+						"Impossible de supprimer l'utilisateur avec l'identifiant " + req.params.id
 				});
 			}
 		})
 		.catch(err => {
 			res.status(500).send({
-				message: "Impossible de supprimer l'utilisateur avec l'identifiant" + id
+				message: "Impossible de trouver l'utilisateur avec l'identifiant" + req.params.id
 			});
 		});
 };

@@ -136,25 +136,28 @@ exports.getOnePost = (req, res, next) => {
 
 /*SUPPRIMER UNE PUBLICATION*/
 exports.deletePost = (req, res, next) => {
-	const id = req.params.id;
-
-	Post.destroy({
-		where: { id: id }
+	Post.findOne({
+		where: { id: req.params.id }
 	})
-		.then(num => {
-			if (num == 1) {
-				res.send({
-					message: "Publication supprimée!"
+		.then(post => {
+			if (post !== null) {
+				Comment.destroy({ where: { postId: post.id } }).then(() => {
+					console.log("Touts les commentaires liés ce post ont bien été supprimés!");
 				});
+				Post.destroy({ where: { id: post.id } }).then(() =>
+					res.send({ message: "Publication supprimée avec succès!" })
+				);
 			} else {
 				res.send({
-					message: `Impossible de supprimer la publication avec l'id=${id}.`
+					message:
+						"Impossible de supprimer cette publication avec l'identifiant " +
+						req.params.id
 				});
 			}
 		})
 		.catch(err => {
 			res.status(500).send({
-				message: "erreur lors de la suppression de la publication avec l'id=" + id
+				message: "Impossible de trouver la publication avec l'identifiant" + req.params.id
 			});
 		});
 };

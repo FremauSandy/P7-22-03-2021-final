@@ -42,11 +42,11 @@ const Post = db.define("post", {
 User.hasMany(Comment, { foreignKey: "userId" });
 Comment.belongsTo(User);
 
-Post.hasMany(Comment, { foreignKey: "postId" }); // work !
-Comment.belongsTo(Post);
+Post.hasMany(Comment, { foreignKey: "postId" });
+Comment.belongsTo(Post, { onDelete: "cascade", hooks: true });
 
-User.hasMany(Post, { foreignKey: "userId" }); // work !
-Post.belongsTo(User);
+User.hasMany(Post, { foreignKey: "userId" });
+Post.belongsTo(User, { onDelete: "cascade", hooks: true });
 
 Post.sync();
 //Post.sync({ force: true });

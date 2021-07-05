@@ -77,7 +77,6 @@ export default {
 <style lang="scss">
 .bloc-new-post {
 	width: 100%;
-	display: flex;
 	background-color: white;
 	border-radius: 10px;
 	margin-left: 30px;
@@ -109,8 +108,7 @@ export default {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		justify-content: space-between;
-		height: 260px;
+		height: 229px;
 		width: 100%;
 		input[type="text"],
 		input[type="textarea"] {

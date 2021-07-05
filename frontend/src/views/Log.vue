@@ -93,7 +93,7 @@ export default {
 						localStorage.setItem("username", res.data.username);
 						localStorage.setItem("jwt", res.data.token);
 						localStorage.setItem("userId", parseInt(res.data.userId));
-						localStorage.setItem("isAdmin", res.data.isAdmin);
+						localStorage.setItem("isadmin", res.data.isadmin);
 						console.log(localStorage);
 						this.$router.push("/wall");
 					})

@@ -57,6 +57,7 @@ export default {
 			this.userId = localStorage.getItem("userId");
 			if (token) {
 				this.isLogged = true;
+				this.getUser;
 			} else {
 				this.isLogged = false;
 			}
@@ -133,8 +134,6 @@ export default {
 		}
 	},
 	mounted() {
-		this.userId;
-		this.getUser;
 		this.getAllPosts();
 	}
 };

@@ -61,7 +61,7 @@ export default {
 			},
 			//publication
 			author: this.post.user.username,
-			//postId: this.post.id,
+			postId: this.post.id,
 			//commentaires
 			Comments: [],
 			//envoi

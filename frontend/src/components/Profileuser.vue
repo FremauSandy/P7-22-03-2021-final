@@ -6,12 +6,12 @@
 			<div class="mark-admin" v-if="user.isadmin == true">
 				<i class="fas fa-crown"></i>
 			</div>
-			<!-- modification infos user -->
-			<button class="edit-btn" @click="showForm = !showForm">
+			<!-- modification infos user par l'admin -->
+			<button class="edit-btn" v-if="user.isadmin == true">
 				<i class="fas fa-pen"></i>
 			</button>
-			<!-- suppression compte -->
-			<button @click="deleteUser(user.id)" class="delete-btn">
+			<!-- suppression compte par l'admin-->
+			<button @click="deleteUser(user.id)" class="delete-btn" v-if="user.isadmin == true">
 				<i class="fas fa-trash"></i>
 			</button>
 		</div>
@@ -22,38 +22,10 @@
 		</div>
 
 		<!-- infos utilisateur connecté -->
-		<form class="infos-user">
-			<h1 class="profile-name" v-if="showForm">{{ user.username }}</h1>
-			<!-- changer pseudonyme -->
-			<input
-				v-model="user.username"
-				class="input-form input-A"
-				type="text"
-				v-if="!showForm"
-				placeholder="Pseudonyme"
-			/>
-			<h2 class="profile-email" v-if="showForm">{{ user.email }}</h2>
-			<!-- changer email -->
-			<input
-				v-model="user.email"
-				class="input-form"
-				type="text"
-				v-if="!showForm"
-				placeholder="Email"
-			/>
-			<!-- changer mot de passe -->
-			<input
-				class="input-form"
-				placeholder="Password"
-				type="text"
-				v-model="password"
-				v-if="!showForm"
-				required
-			/>
-			<button class="valid-btn" v-if="!showForm" @click="updateUser">
-				<i class="fas fa-check"></i>
-			</button>
-		</form>
+		<div class="infos-user">
+			<h1 class="profile-name">{{ user.username }}</h1>
+			<h2 class="profile-email">{{ user.email }}</h2>
+		</div>
 
 		<!-- naviguation -->
 		<nav>
@@ -161,7 +133,7 @@ export default {
 	text-align: center;
 	position: relative;
 	width: 250px;
-	height: 350px;
+	height: 300px;
 	background-color: white;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	border-radius: 10px;
