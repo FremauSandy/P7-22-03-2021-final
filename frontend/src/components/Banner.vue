@@ -2,7 +2,7 @@
 	<div class="banner">
 		<img src="../assets/icon-white.png" alt="logo" class="logo-G" />
 		<div class="text-banner">
-			<h2 class="welcome">Bienvenue {{ user.username }} sur le réseau</h2>
+			<h2 class="welcome">Bienvenue {{ user.username | capitalize }} sur le réseau</h2>
 			<h1 class="group">Groupomania</h1>
 		</div>
 	</div>
@@ -18,6 +18,13 @@ export default {
 				username: localStorage.getItem("username")
 			}
 		};
+	},
+	filters: {
+		capitalize: function(value) {
+			if (!value) return "";
+			value = value.toString();
+			return value.charAt(0).toUpperCase() + value.slice(1);
+		}
 	}
 };
 </script>

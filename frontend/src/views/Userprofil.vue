@@ -17,22 +17,51 @@
 					<i class="fas fa-trash"></i>
 				</button>
 			</div>
+
 			<!-- photo profil -->
 			<div class="face-photo">
 				<div class="avatar-img">{{ user.username | truncate(1) }}</div>
 			</div>
+
 			<!-- infos utilisateur et formulaire -->
-			<form class="infos-user">
+			<form class="infos-user" v-on:submit.prevent="updateUser">
+				<!-- pseudonyme -->
+				<span class="error-infos" v-if="!showForm"
+					>Merci de bien vouloir renseigner tous les champs</span
+				>
 				<h1 v-if="showForm">Pseudonyme: {{ user.username }}</h1>
+				<span class="error" v-if="!$v.username.alpha && $v.username.$dirty"
+					>Merci de bien vouloir saisir un pseudonyme valide !</span
+				>
 				<input
-					v-model="user.username"
-					class="form-profil top"
+					v-model="username"
+					class="form-profil"
 					type="text"
+					placeholder="Pseudonyme"
 					v-if="!showForm"
 				/>
+
+				<!-- adresse mail -->
 				<h2 class="user-email" v-if="showForm">Email: {{ user.email }}</h2>
-				<input v-model="user.email" class="form-profil" type="text" v-if="!showForm" />
+				<span
+					class="error"
+					v-if="(!$v.email.required || !$v.email.email) && $v.email.$dirty && submited"
+					>Merci de bien vouloir saisir une autre adresse mail</span
+				>
+				<input
+					v-model="email"
+					class="form-profil"
+					type="text"
+					placeholder="Email"
+					v-if="!showForm"
+				/>
+
+				<!-- mot de passe -->
 				<h2 class="user-password" v-if="showForm">Password: *****</h2>
+				<span class="error" v-if="!$v.password.isPasswordStrong && $v.password.$dirty"
+					>Un mot de passe doit contenir au minimum 8 caractères, une majuscule, un
+					chiffre et un caractère spécial.</span
+				>
 				<input
 					class="form-profil"
 					placeholder="Password"
@@ -43,7 +72,7 @@
 				/>
 
 				<div class="form-btn" v-if="!showForm">
-					<button class="valid btn-form" @click="updateUser">
+					<button class="valid btn-form">
 						<i class="fas fa-check"></i>
 					</button>
 				</div>
@@ -57,12 +86,33 @@
 import axios from "axios";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import Vue from "vue";
+import Vuelidate from "vuelidate";
+Vue.use(Vuelidate);
+import { required, alpha, email } from "vuelidate/lib/validators";
 
 export default {
 	name: "Userprofil",
 	components: {
 		Nav,
 		Footer
+	},
+	validations: {
+		username: {
+			required,
+			alpha
+		},
+		email: {
+			required,
+			email
+		},
+		password: {
+			required,
+			isPasswordStrong(password) {
+				const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&-_]){8,}/;
+				return regex.test(password);
+			}
+		}
 	},
 	data() {
 		return {
@@ -71,8 +121,14 @@ export default {
 				userId: localStorage.getItem("userId"),
 				email: localStorage.getItem("email")
 			},
-			password: "*****",
-			showForm: true
+			//form user par défaut
+			username: "",
+			email: "",
+			password: "",
+			showForm: true,
+			//si erreurs form
+			contentError: "",
+			submitted: true
 		};
 	},
 	filters: {
@@ -97,25 +153,33 @@ export default {
 				});
 		},
 		updateUser() {
+			this.$v.$touch();
+			this.submited = true;
 			const userId = localStorage.getItem("userId");
 			const token = localStorage.getItem("jwt");
 			let data = {
-				username: this.user.username,
-				email: this.user.email,
+				username: this.username,
+				email: this.email,
 				password: this.password
 			};
-			axios
-				.put("http://localhost:3000/users/" + userId, data, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${token}`
-					}
-				})
-				.then(res => {
-					console.log(res);
-					alert("Votre profil à bien été modifié !");
-				})
-				.catch(error => console.log(error.res));
+			if (!this.$v.$invalid) {
+				axios
+					.put("http://localhost:3000/users/" + userId, data, {
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: `Bearer ${token}`
+						}
+					})
+					.then(res => {
+						console.log(res);
+						alert("Votre profil à bien été modifié !");
+						document.location.reload();
+					})
+					.catch(error => {
+						this.contentError = true;
+						console.log({ error });
+					});
+			}
 		},
 		deleteUser() {
 			const userId = localStorage.getItem("userId");
@@ -207,6 +271,7 @@ export default {
 			height: 90px;
 			width: 90px;
 			border-radius: 50%;
+			border: 5px solid lightgray;
 			background-color: #42b983;
 			display: flex;
 			justify-content: center;
@@ -224,6 +289,7 @@ export default {
 			flex-direction: column;
 			justify-content: center;
 			align-items: center;
+			margin-top: 20px;
 			h1 {
 				margin: 25px 0 12px 16px;
 				font-weight: 700;
@@ -234,17 +300,13 @@ export default {
 				margin: 12px 0 12px 16px;
 				font-size: 16px;
 			}
-
 			.form-profil {
 				width: 70%;
 				padding-left: 15px;
 				border-radius: 20px;
 				height: 30px;
 				border: 1px solid lightgrey;
-				margin: 10px 0 5px 0;
-			}
-			.top {
-				margin-top: 20px;
+				margin: 5px 0 10px 0;
 			}
 			.btn-form {
 				margin-top: 20px;
@@ -255,31 +317,19 @@ export default {
 				border-radius: 20px;
 				margin: 5px;
 			}
-			.file-input {
-				display: inline-block;
-				text-align: left;
-				background: lightgrey;
-				padding: 15px;
-				width: 65%;
-				height: 21px;
-				border-radius: 3px;
-				margin: 10px 0 10px 0;
-				[type="file"] {
-					width: 100%;
-					height: 100%;
-					cursor: pointer;
-				}
-				.label {
-					color: #2c3e5d;
-					white-space: nowrap;
-					opacity: 0.3;
-				}
+			.error-infos,
+			.error {
+				font-size: 12px;
+				color: #d15159;
+				text-align: center;
+				width: 90%;
+				margin-top: 5px;
+			}
+			.error-infos {
+				margin-bottom: 10px;
 			}
 			.valid {
 				background-color: #42b983;
-			}
-			.close {
-				background-color: #d15159;
 			}
 		}
 	}

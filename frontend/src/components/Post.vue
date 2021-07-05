@@ -5,11 +5,16 @@
 		<div class="model-profil">
 			<div class="author">
 				<div class="model-picture">{{ author | truncate(1) }}</div>
-				<a class="pseudo">
-					<router-link :to="{ name: 'Randomprofile' }">
-						{{ post.user.username }}</router-link
+				<div class="pseudo">
+					{{ post.user.username | capitalize }}
+					<button
+						v-if="user.isadmin == true"
+						@click="deleteUser(user.id)"
+						class="delete-user"
 					>
-				</a>
+						<i class="fas fa-trash"></i>
+					</button>
+				</div>
 			</div>
 			<!-- si admin ou auteur -->
 			<div class="action" v-if="post.userId == user.id || user.isadmin == true">
@@ -76,6 +81,11 @@ export default {
 				.slice(0, num)
 				.join("");
 			return reqdString;
+		},
+		capitalize: function(value) {
+			if (!value) return "";
+			value = value.toString();
+			return value.charAt(0).toUpperCase() + value.slice(1);
 		}
 	},
 	methods: {
@@ -205,7 +215,20 @@ export default {
 			flex-direction: row;
 			.pseudo {
 				color: white;
-				margin-top: 15px;
+				margin-top: 10px;
+				.delete-user {
+					margin-left: 10px;
+					border: none;
+					border-radius: 50%;
+					width: 30px;
+					height: 30px;
+					color: white;
+					background-color: #d15159;
+					opacity: 0.5;
+					&:hover {
+						opacity: 1;
+					}
+				}
 			}
 		}
 		h1 {
@@ -225,6 +248,10 @@ export default {
 		}
 		.dlt-post {
 			background-color: #d15159;
+			opacity: 0.5;
+			&:hover {
+				opacity: 1;
+			}
 		}
 	}
 	.post-content {

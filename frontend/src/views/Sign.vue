@@ -57,7 +57,6 @@
 </template>
 
 <script>
-// import axios from "axios";
 import Vue from "vue";
 import Vuelidate from "vuelidate";
 Vue.use(Vuelidate);
@@ -115,6 +114,7 @@ export default {
 					.catch(error => {
 						this.contentError = true;
 						console.log({ error });
+						alert("Votre modification à rencontrer un problème ! ");
 					});
 			}
 		}

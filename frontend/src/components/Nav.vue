@@ -5,11 +5,6 @@
 			<li class="choice-nav">
 				<router-link :to="{ name: 'Wall' }"><i class="fas fa-home"></i>Acceuil</router-link>
 			</li>
-			<li class="choice-nav">
-				<router-link :to="{ name: 'Userprofil' }"
-					><i class="fas fa-user"></i>Profil
-				</router-link>
-			</li>
 			<li class="choice-nav" v-on:click="logout()">
 				<i class="fas fa-sign-out-alt"></i>Logout
 			</li>
@@ -74,9 +69,6 @@ nav {
 			width: 100px;
 		}
 		.choice-nav:nth-child(2) {
-			width: 110px;
-		}
-		.choice-nav:nth-child(3) {
 			width: 100px;
 		}
 	}

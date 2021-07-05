@@ -1,19 +1,11 @@
 <template>
 	<div class="card-profile">
 		<!-- action Compte -->
-		<div v-if="user.userId == user.userId || user.isadmin == true" class="btn-inner">
+		<div v-if="user.isadmin == true" class="btn-inner">
 			<!-- si admin -->
-			<div class="mark-admin" v-if="user.isadmin == true">
+			<div class="mark-admin">
 				<i class="fas fa-crown"></i>
 			</div>
-			<!-- modification infos user par l'admin -->
-			<button class="edit-btn" v-if="user.isadmin == true">
-				<i class="fas fa-pen"></i>
-			</button>
-			<!-- suppression compte par l'admin-->
-			<button @click="deleteUser(user.id)" class="delete-btn" v-if="user.isadmin == true">
-				<i class="fas fa-trash"></i>
-			</button>
 		</div>
 
 		<!-- photo par défaut -->
@@ -58,16 +50,16 @@ export default {
 	},
 	data() {
 		return {
+			//connection utilisateur
 			user: {
 				username: localStorage.getItem("username"),
 				userId: localStorage.getItem("userId"),
 				email: localStorage.getItem("email")
-			},
-			password: "*****",
-			showForm: true
+			}
 		};
 	},
 	methods: {
+		//chargement de l'utilisateur connecté
 		getUser() {
 			const id = localStorage.getItem("userId");
 			axios
@@ -79,44 +71,7 @@ export default {
 					console.log(e);
 				});
 		},
-		updateUser() {
-			const userId = localStorage.getItem("userId");
-			const token = localStorage.getItem("jwt");
-			let data = {
-				username: this.user.username,
-				email: this.user.email,
-				password: this.password
-			};
-			axios
-				.put("http://localhost:3000/users/" + userId, data, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${token}`
-					}
-				})
-				.then(res => {
-					console.log(res);
-					alert("Votre profil à bien été modifié !");
-				})
-				.catch(error => console.log(error.res));
-		},
-		deleteUser() {
-			const userId = localStorage.getItem("userId");
-			const token = localStorage.getItem("jwt");
-			axios
-				.delete("http://localhost:3000/users/" + userId, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${token}`
-					}
-				})
-				.then(() => {
-					alert("L'utilisateur à bien été supprimé");
-					localStorage.clear();
-					this.$router.push("/users/sign");
-				})
-				.catch(error => console.log(error));
-		},
+		//déconnection
 		logout() {
 			localStorage.clear();
 			this.$router.push("/users/log");

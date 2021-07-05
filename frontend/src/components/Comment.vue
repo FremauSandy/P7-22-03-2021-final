@@ -5,7 +5,7 @@
 				{{ writeBy | truncate(1) }}
 			</div>
 			<div class="content">
-				<p class="comment-author">{{ writeBy }}</p>
+				<p class="comment-author">{{ writeBy | capitalize }}</p>
 				<div class="content-comment">{{ comment.content }}</div>
 			</div>
 		</div>
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
 	name: "Comment",
 	props: {
@@ -32,6 +33,11 @@ export default {
 				.slice(0, num)
 				.join("");
 			return reqdString;
+		},
+		capitalize: function(value) {
+			if (!value) return "";
+			value = value.toString();
+			return value.charAt(0).toUpperCase() + value.slice(1);
 		}
 	},
 	data() {
@@ -45,6 +51,22 @@ export default {
 			//auteur
 			writeBy: this.comment.user.username
 		};
+	},
+	methods: {
+		getUser() {
+			const id = localStorage.getItem("userId");
+			axios
+				.get("http://localhost:3000/users/" + id)
+				.then(res => {
+					this.user = res.data;
+				})
+				.catch(e => {
+					console.log(e);
+				});
+		}
+	},
+	mounted() {
+		this.getUser();
 	}
 };
 </script>
@@ -99,6 +121,10 @@ export default {
 		height: 30px;
 		color: white;
 		margin-right: 15px;
+		opacity: 0.5;
+		&:hover {
+			opacity: 1;
+		}
 	}
 }
 </style>
