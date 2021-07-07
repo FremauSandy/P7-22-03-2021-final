@@ -185,7 +185,7 @@ export default {
 }
 @media (max-width: 700px) {
 	.bloc-new-post {
-		width: 80%;
+		width: 100%;
 		margin-left: 0;
 	}
 	.file-input {

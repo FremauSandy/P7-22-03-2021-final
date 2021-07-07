@@ -18,6 +18,9 @@
 			</div>
 			<!-- si admin ou auteur -->
 			<div class="action" v-if="post.userId == user.id || user.isadmin == true">
+				<button class="up-post" @click="showForm = !showForm">
+					<i class="fas fa-pen"></i>
+				</button>
 				<button class="dlt-post" @click="$emit('delete-post', post.id)">
 					<i class="fas fa-trash"></i>
 				</button>
@@ -25,11 +28,35 @@
 		</div>
 		<!-- contenu publication -->
 		<div class="post-content">
+			<!-- titre -->
 			<h2 v-if="showForm">{{ post.title }}</h2>
+			<input
+				class="post-text title"
+				v-if="!showForm"
+				placeholder="Titre"
+				type="text"
+				v-model="post.title"
+			/>
+			<button class="valid-btn" v-if="!showForm" @click="updatePost">
+				<i class="fas fa-check"></i>
+			</button>
+
+			<!-- contenu -->
 			<p v-if="showForm">{{ post.content }}</p>
-			<div class="content-form-file"></div>
-			<div class="img-content" v-if="post.image !== 'null'">
+			<input
+				class="post-text content"
+				v-if="!showForm"
+				placeholder="Contenu"
+				type="text"
+				v-model="post.content"
+			/>
+
+			<!-- image -->
+			<div class="img-content" v-if="post.image !== 'null' && !showForm">
 				<img :src="post.image" class="model-file" />
+			</div>
+			<div class="file-input" v-if="!showForm">
+				<input id="image" type="file" name="image" @change="imageSelected" />
 			</div>
 		</div>
 		<!-- AJOUTER COMMENTAIRE -->
@@ -102,6 +129,23 @@ export default {
 					console.log(e);
 				});
 		},
+		deleteUser() {
+			const userId = localStorage.getItem("userId");
+			const token = localStorage.getItem("jwt");
+			axios
+				.delete("http://localhost:3000/users/" + userId, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`
+					}
+				})
+				.then(() => {
+					alert("L'utilisateur à bien été supprimé");
+					localStorage.clear();
+					this.$router.push("/users/sign");
+				})
+				.catch(error => console.log(error));
+		},
 		//publications
 		imageSelect(event) {
 			//permet la publication d'image dans un post
@@ -124,6 +168,28 @@ export default {
 			this.post.content = "";
 			this.post.image = "";
 			this.submitted = true;
+		},
+		updatePost(post) {
+			let postId = this.post.id;
+			const formData = new FormData();
+			formData.append("userId", this.userId);
+			formData.append("title", post.title);
+			formData.append("content", post.content);
+			formData.append("image", post.image);
+			const token = localStorage.getItem("jwt");
+			axios
+				.put("http://localhost:3000/wall/posts/" + postId, formData, {
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${token}`
+					}
+				})
+				.then(res => {
+					console.log(res);
+					alert("Votre publication à bien été modifiée !");
+					document.location.reload();
+				})
+				.catch(error => console.log(error.response));
 		},
 		//commentaires
 		addComment(comment) {
@@ -210,6 +276,15 @@ export default {
 			width: 50px;
 			margin: 0 15px 0 15px;
 		}
+		@media (max-width: 700px) {
+			.model-picture {
+				margin: 0 10px 0 5px;
+			}
+			.delete-user {
+				color: #d15159;
+				background-color: none;
+			}
+		}
 		.author {
 			display: flex;
 			flex-direction: row;
@@ -229,13 +304,19 @@ export default {
 						opacity: 1;
 					}
 				}
+				@media (max-width: 700px) {
+					.delete-user {
+						color: #d15159;
+						background-color: inherit;
+						margin-left: 0;
+						opacity: 1;
+						width: 0;
+					}
+				}
 			}
 		}
 		h1 {
 			font-size: 16px;
-		}
-		.up-post {
-			background-color: #42b983;
 		}
 		.up-post,
 		.dlt-post {
@@ -245,11 +326,31 @@ export default {
 			height: 30px;
 			color: white;
 			margin-right: 5px;
+			opacity: 0.5;
+			&:hover {
+				opacity: 1;
+			}
+		}
+		.up-post {
+			background-color: #42b983;
 		}
 		.dlt-post {
 			background-color: #d15159;
-			opacity: 0.5;
-			&:hover {
+		}
+		@media (max-width: 700px) {
+			.action {
+				background-color: #42b983;
+				border-radius: 20px;
+			}
+			.up-post {
+				background-color: inherit;
+				color: #2c3e5d;
+				opacity: 1;
+				margin-left: 5px;
+			}
+			.dlt-post {
+				background-color: inherit;
+				color: #d15159;
 				opacity: 1;
 			}
 		}
@@ -260,6 +361,20 @@ export default {
 		h2 {
 			width: 100%;
 			border-bottom: 2px solid lightgrey;
+		}
+		.post-text {
+			margin: 15px 0 5px;
+			padding: 10px;
+			border-radius: 20px;
+			border: 1px solid rgba(0, 0, 0, 0.3);
+		}
+		.title {
+			width: 80%;
+			margin-right: 20px;
+		}
+		.content {
+			margin-bottom: 20px;
+			width: 95%;
 		}
 		.img-content {
 			width: 100%;
@@ -272,21 +387,7 @@ export default {
 				max-height: 100%;
 			}
 		}
-		.form-title {
-			margin: 15px 20px 10px 0;
-			padding-left: 10px;
-			width: 98%;
-			height: 25px;
-			border-radius: 20px;
-			border: 1px solid lightgrey;
-		}
-		.form-content {
-			padding-left: 10px;
-			width: 98%;
-			height: 25px;
-			border-radius: 20px;
-			border: 1px solid lightgrey;
-		}
+		.valid-btn,
 		.btn-valid {
 			border: none;
 			border-radius: 50%;

@@ -19,18 +19,18 @@ body {
 	width: 100%;
 	background: #ddd;
 	margin: 0;
-}
-#app {
-	font-family: "Roboto", sans-serif;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	width: 100%;
-	max-width: 1024px;
-	a {
-		color: white;
-		text-decoration: none;
+	#app {
+		font-family: "Roboto", sans-serif;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		width: 100%;
+		max-width: 1024px;
+		a {
+			color: white;
+			text-decoration: none;
+		}
 	}
 }
 </style>

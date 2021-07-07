@@ -72,5 +72,14 @@ nav {
 			width: 100px;
 		}
 	}
+	@media (max-width: 700px) {
+		.banner {
+			margin-bottom: 0;
+		}
+		ul {
+			margin-top: 0;
+			border-radius: 0;
+		}
+	}
 }
 </style>

@@ -109,7 +109,7 @@ export default {
 				.then(res => {
 					console.log(res);
 					alert("Votre publication à bien été enregistrée !");
-					document.location.reload(); //a changer !!  push dans tab posts!
+					document.location.reload();
 				})
 				.catch(error => console.log(error.response));
 		},
@@ -154,16 +154,6 @@ export default {
 		flex-direction: row;
 		margin-bottom: 20px;
 	}
-	@media (max-width: 700px) {
-		.action-user {
-			width: 95%;
-			flex-direction: column;
-			align-items: center;
-		}
-		.wall-post {
-			width: 95%;
-		}
-	}
 	.wall-post {
 		width: 76%;
 		display: flex;
@@ -178,6 +168,16 @@ export default {
 		font-size: 20px;
 		font-weight: 700;
 		color: white;
+	}
+	@media (max-width: 700px) {
+		.action-user {
+			width: 95%;
+			flex-direction: column;
+			align-items: center;
+		}
+		.wall-post {
+			width: 95%;
+		}
 	}
 }
 </style>

@@ -46,4 +46,9 @@ footer {
 		}
 	}
 }
+@media (max-width: 700px) {
+	footer {
+		border-radius: 0;
+	}
+}
 </style>

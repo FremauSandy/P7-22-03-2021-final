@@ -99,6 +99,12 @@ export default {
 			width: 40px;
 			font-size: 18px;
 		}
+		@media (max-width: 700px) {
+			.comment-photo {
+				width: 30px;
+				height: 30px;
+			}
+		}
 		.content {
 			margin-left: 10px;
 			.comment-author {
@@ -110,6 +116,12 @@ export default {
 				font-size: 12px;
 				border-radius: 20px;
 				margin-left: 10px;
+			}
+			@media (max-width: 700px) {
+				.content-comment {
+					margin: 0;
+					width: 200px;
+				}
 			}
 		}
 	}
@@ -123,6 +135,13 @@ export default {
 		margin-right: 15px;
 		opacity: 0.5;
 		&:hover {
+			opacity: 1;
+		}
+	}
+	@media (max-width: 700px) {
+		.dlt-com {
+			background-color: inherit;
+			color: #d15159;
 			opacity: 1;
 		}
 	}

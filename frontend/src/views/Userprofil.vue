@@ -334,4 +334,15 @@ export default {
 		}
 	}
 }
+@media (max-width: 700px) {
+	#user-profil {
+		width: 100%;
+		.front {
+			width: 95%;
+			.btn-inner {
+				left: 80px;
+			}
+		}
+	}
+}
 </style>
