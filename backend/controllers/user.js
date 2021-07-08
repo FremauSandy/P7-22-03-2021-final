@@ -1,12 +1,11 @@
 /*IMPORT PACKAGES*/
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-//const bouncer = require("express-bouncer")(120000, 1.8e6, 5);
+const bouncer = require("express-bouncer")(120000, 1.8e6, 5);
 
 /*IMPORT MODEL*/
 const User = require("../models/user");
 const Post = require("../models/post");
-const { models } = require("../middleware/dbConfig");
 
 /*ENREGISTRER UN NOUVEL UTILISATEUR*/
 exports.signup = (req, res) => {
@@ -49,7 +48,6 @@ exports.login = (req, res, next) => {
 							}
 						)
 					});
-					//bouncer.reset(req);
 				})
 				.catch(error => res.status(401).json({ error }));
 		})
