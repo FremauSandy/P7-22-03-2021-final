@@ -4,18 +4,35 @@
 			<div class="comment-photo">
 				{{ writeBy | truncate(1) }}
 			</div>
-			<div class="content">
+			<form class="content">
 				<p class="comment-author">{{ writeBy | capitalize }}</p>
-				<div class="content-comment">{{ comment.content }}</div>
+				<div class="content-comment" v-if="showFormCom">{{ comment.content }}</div>
+				<input
+					class="comment-text"
+					v-if="!showFormCom"
+					type="text"
+					v-model="comment.content"
+				/>
+			</form>
+			<div class="comment-action" v-if="comment.userId == user.id || user.isadmin == true">
+				<!-- <button class="valid-com" v-if="!showFormCom" @click="upComment">
+					<i class="fas fa-check"></i>
+				</button>
+				<button class="close-com" v-if="!showFormCom" @click="showFormCom = true">
+					<i class="fas fa-times"></i>
+				</button> -->
+				<!-- <button class="up-com" v-if="showFormCom" @click="showFormCom = !showFormCom">
+					<i class="fas fa-pen"></i>
+				</button> -->
+				<button
+					class="dlt-com"
+					v-if="showFormCom"
+					@click="$emit('delete-comment', comment.id)"
+				>
+					<i class="fas fa-trash"></i>
+				</button>
 			</div>
 		</div>
-		<button
-			v-if="comment.userId == user.id || user.isadmin == true"
-			class="dlt-com"
-			@click="$emit('delete-comment', comment.id)"
-		>
-			<i class="fas fa-trash"></i>
-		</button>
 	</div>
 </template>
 
@@ -49,7 +66,9 @@ export default {
 				isadmin: localStorage.getItem("isAdmin")
 			},
 			//auteur
-			writeBy: this.comment.user.username
+			writeBy: this.comment.user.username,
+			//envoi
+			showFormCom: true
 		};
 	},
 	methods: {
@@ -76,7 +95,6 @@ export default {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	justify-content: space-between;
 	background-color: white;
 	height: 60px;
 	padding: 5px 0 10px 0;
@@ -87,7 +105,8 @@ export default {
 		flex-direction: row;
 		justify-items: center;
 		align-items: center;
-		margin-left: 20px;
+		margin: 0 20px 0 20px;
+		width: 100%;
 		.comment-photo {
 			display: flex;
 			justify-content: center;
@@ -107,6 +126,7 @@ export default {
 		}
 		.content {
 			margin-left: 10px;
+			width: 80%;
 			.comment-author {
 				margin: 0 0 5px 0;
 				font-size: 14px;
@@ -117,6 +137,12 @@ export default {
 				border-radius: 20px;
 				margin-left: 10px;
 			}
+			.comment-text {
+				width: 90%;
+				padding: 5px;
+				border-radius: 20px;
+				border: 1px solid rgba(0, 0, 0, 0.3);
+			}
 			@media (max-width: 700px) {
 				.content-comment {
 					margin: 0;
@@ -125,24 +151,41 @@ export default {
 			}
 		}
 	}
-	.dlt-com {
-		border: none;
-		background-color: #d15159;
-		border-radius: 50%;
-		width: 30px;
-		height: 30px;
-		color: white;
-		margin-right: 15px;
-		opacity: 0.5;
-		&:hover {
-			opacity: 1;
+	.comment-action {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		button {
+			margin-right: 5px;
 		}
-	}
-	@media (max-width: 700px) {
+		.valid-com,
+		.up-com,
+		.close-com,
 		.dlt-com {
-			background-color: inherit;
-			color: #d15159;
-			opacity: 1;
+			border: none;
+			border-radius: 50%;
+			width: 30px;
+			height: 30px;
+			color: white;
+			opacity: 0.5;
+			&:hover {
+				opacity: 1;
+			}
+		}
+		.valid-com,
+		.up-com {
+			background-color: #42b983;
+		}
+		.close-com,
+		.dlt-com {
+			background-color: #d15159;
+		}
+		@media (max-width: 700px) {
+			.dlt-com {
+				background-color: inherit;
+				color: #d15159;
+				opacity: 1;
+			}
 		}
 	}
 }

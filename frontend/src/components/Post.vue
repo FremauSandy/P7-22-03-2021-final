@@ -18,9 +18,9 @@
 			</div>
 			<!-- si admin ou auteur -->
 			<div class="action" v-if="post.userId == user.id || user.isadmin == true">
-				<button class="up-post" @click="showForm = !showForm">
+				<!-- <button class="up-post" @click="showForm = !showForm">
 					<i class="fas fa-pen"></i>
-				</button>
+				</button> -->
 				<button class="dlt-post" @click="$emit('delete-post', post.id)">
 					<i class="fas fa-trash"></i>
 				</button>
@@ -30,33 +30,34 @@
 		<div class="post-content">
 			<!-- titre -->
 			<h2 v-if="showForm">{{ post.title }}</h2>
-			<input
-				class="post-text title"
+			<!-- si changement -->
+			<!-- <input
+				class="post-text"
 				v-if="!showForm"
 				placeholder="Titre"
 				type="text"
 				v-model="post.title"
-			/>
-			<button class="valid-btn" v-if="!showForm" @click="updatePost">
-				<i class="fas fa-check"></i>
-			</button>
-
+			/> -->
 			<!-- contenu -->
 			<p v-if="showForm">{{ post.content }}</p>
-			<input
-				class="post-text content"
+			<!-- si changement -->
+			<!-- <input
+				class="post-text"
 				v-if="!showForm"
 				placeholder="Contenu"
 				type="text"
 				v-model="post.content"
-			/>
+			/> -->
+			<div class="file-change" v-if="!showForm">
+				<input id="image" type="file" name="image" @change="imageSelected" />
+			</div>
+			<!-- <button class="valid-btn" v-if="!showForm">
+				<i class="fas fa-check"></i>
+			</button> -->
 
 			<!-- image -->
-			<div class="img-content" v-if="post.image !== 'null' && !showForm">
+			<div class="img-content" v-if="post.image !== 'null'">
 				<img :src="post.image" class="model-file" />
-			</div>
-			<div class="file-input" v-if="!showForm">
-				<input id="image" type="file" name="image" @change="imageSelected" />
 			</div>
 		</div>
 		<!-- AJOUTER COMMENTAIRE -->
@@ -145,51 +146,6 @@ export default {
 					this.$router.push("/users/sign");
 				})
 				.catch(error => console.log(error));
-		},
-		//publications
-		imageSelect(event) {
-			//permet la publication d'image dans un post
-			this.post.image = event.target.files[0];
-			console.log(this.post.image);
-		},
-		upPostSubmit(e) {
-			//avant requete post publication dans "wall"
-			e.preventDefault();
-			const newPost = {
-				userId: localStorage.getItem("userId"),
-				title: this.post.title,
-				content: this.post.content,
-				image: this.post.image
-			};
-
-			this.$emit("update-post", newPost);
-
-			this.post.title = "";
-			this.post.content = "";
-			this.post.image = "";
-			this.submitted = true;
-		},
-		updatePost(post) {
-			let postId = this.post.id;
-			const formData = new FormData();
-			formData.append("userId", this.userId);
-			formData.append("title", post.title);
-			formData.append("content", post.content);
-			formData.append("image", post.image);
-			const token = localStorage.getItem("jwt");
-			axios
-				.put("http://localhost:3000/wall/posts/" + postId, formData, {
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${token}`
-					}
-				})
-				.then(res => {
-					console.log(res);
-					alert("Votre publication à bien été modifiée !");
-					document.location.reload();
-				})
-				.catch(error => console.log(error.response));
 		},
 		//commentaires
 		addComment(comment) {
@@ -364,17 +320,10 @@ export default {
 		}
 		.post-text {
 			margin: 15px 0 5px;
+			width: 95%;
 			padding: 10px;
 			border-radius: 20px;
 			border: 1px solid rgba(0, 0, 0, 0.3);
-		}
-		.title {
-			width: 80%;
-			margin-right: 20px;
-		}
-		.content {
-			margin-bottom: 20px;
-			width: 95%;
 		}
 		.img-content {
 			width: 100%;
@@ -387,39 +336,33 @@ export default {
 				max-height: 100%;
 			}
 		}
-		.valid-btn,
-		.btn-valid {
+		.valid-btn {
 			border: none;
 			border-radius: 50%;
 			width: 30px;
 			height: 30px;
 			color: white;
 			background-color: #42b983;
-			margin-right: 5px;
+			margin-left: 15px;
 		}
-		.content-form-file {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			.file-input {
-				display: inline-block;
-				text-align: left;
-				background: lightgrey;
-				padding: 15px;
-				width: 80%;
-				height: 21px;
-				border-radius: 3px;
-				margin: 10px 15px 10px 0;
-				[type="file"] {
-					width: 100%;
-					height: 100%;
-					cursor: pointer;
-				}
-				.label {
-					color: #2c3e5d;
-					white-space: nowrap;
-					opacity: 0.3;
-				}
+		.file-change {
+			display: inline-block;
+			text-align: left;
+			background: lightgrey;
+			padding: 15px;
+			width: 80%;
+			height: 21px;
+			border-radius: 3px;
+			margin: 10px 0 10px 0;
+			[type="file"] {
+				width: 100%;
+				height: 100%;
+				cursor: pointer;
+			}
+			.label {
+				color: #2c3e5d;
+				white-space: nowrap;
+				opacity: 0.3;
 			}
 		}
 	}
