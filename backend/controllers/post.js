@@ -63,14 +63,16 @@ exports.getOnePost = (req, res, next) => {
 		.catch(error => res.status(404).json({ error: "getOne error : " + error }));
 };
 
-/*MODIFIER UNE PUBLICATION*/ exports.modifyPost = (req, res, next) => {
+/*MODIFIER UNE PUBLICATION*/
+exports.modifyPost = (req, res, next) => {
 	if (req.body.content.length < 3 || req.body.title.length < 3) {
 		res.status(400).json({ error: "Ce changement est beaucoup trop court" });
 	} else {
-		Post.findOne({ where: { id: req.params.id } })
+		Post.findOne({ where: { id: req.params.id }, include: [User] })
 			.then(post => {
-				console.log(res);
-				if (post.userId === req.body.userId) {
+				console.log(req.params.id); // ok
+				if (post.userId === post.user.id) {
+					// a corriger
 					const postObject = req.file
 						? {
 								...req.body.post,
