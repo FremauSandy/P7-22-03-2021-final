@@ -5,7 +5,9 @@
 			<h1>{{ username | capitalize }}</h1>
 		</div>
 		<form class="form-post" @submit="onSubmit">
+			<label for="title" class="hidden">titre</label>
 			<input id="title" type="text" placeholder=" Titre" v-model="post.title" required />
+			<label for="content" class="hidden">contenu</label>
 			<input
 				id="content"
 				type="textarea"
@@ -13,6 +15,7 @@
 				v-model="post.content"
 				required
 			/>
+			<label for="image" class="hidden">image</label>
 			<div class="file-input">
 				<input id="image" type="file" name="image" @change="imageSelected" />
 			</div>
@@ -98,7 +101,8 @@ export default {
 		.profil-picture {
 			text-align: center;
 			border-radius: 100%;
-			background-color: #42b983;
+			border: 5px solid #ddd;
+			background-image: linear-gradient(to top, #00ecbc 0%, #42b983 100%);
 			color: white;
 			font-size: 40px;
 			height: 50px;
@@ -115,6 +119,9 @@ export default {
 		align-items: center;
 		height: 229px;
 		width: 100%;
+		.hidden {
+			opacity: 0;
+		}
 		input[type="text"],
 		input[type="textarea"] {
 			border-radius: 20px;

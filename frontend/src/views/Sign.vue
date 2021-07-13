@@ -4,48 +4,50 @@
 
 		<form class="left" method="post" v-on:submit.prevent="signup()">
 			<h1>Créer un compte</h1>
-			<label for="username">
-				<input
-					type="text"
-					name="username"
-					placeholder="Nom d'utilisateur"
-					v-model="username"
-				/>
-				<span class="error" v-if="!$v.username.required && $v.username.$dirty && submited"
-					>Merci de bien vouloir saisir votre pseudonyme !</span
-				>
-				<span class="error" v-if="!$v.username.alpha && $v.username.$dirty"
-					>Merci de bien vouloir saisir un pseudonyme valide !</span
-				>
-			</label>
-			<label for="email">
-				<input
-					type="email"
-					name="email"
-					placeholder="E-mail"
-					v-model="email"
-					title="Veuillez renseigner une adresse valide"
-				/>
-				<span
-					class="error"
-					v-if="(!$v.email.required || !$v.email.email) && $v.email.$dirty && submited"
-					>Merci de bien vouloir saisir un email valide !</span
-				>
-			</label>
-			<label for="password">
-				<input
-					type="password"
-					name="password"
-					title="Votre mot de passe doit contenir au minimum 8 caractères, une majuscule, un
+			<label for="username" class="hidden">username</label>
+			<input
+				id="username"
+				type="text"
+				name="username"
+				placeholder="Nom d'utilisateur"
+				v-model="username"
+			/>
+			<span class="error" v-if="!$v.username.required && $v.username.$dirty && submited"
+				>Merci de bien vouloir saisir votre pseudonyme !</span
+			>
+			<span class="error" v-if="!$v.username.alpha && $v.username.$dirty"
+				>Merci de bien vouloir saisir un pseudonyme valide !</span
+			>
+
+			<label for="email" class="hidden">email</label>
+			<input
+				id="email"
+				type="email"
+				name="email"
+				placeholder="E-mail"
+				v-model="email"
+				title="Veuillez renseigner une adresse valide"
+			/>
+			<span
+				class="error"
+				v-if="(!$v.email.required || !$v.email.email) && $v.email.$dirty && submited"
+				>Merci de bien vouloir saisir un email valide !</span
+			>
+
+			<label for="password" class="hidden">password</label>
+			<input
+				id="password"
+				type="password"
+				name="password"
+				title="Votre mot de passe doit contenir au minimum 8 caractères, une majuscule, un
 					chiffre et un caractère spécial."
-					placeholder="Mot de passe"
-					v-model="password"
-				/>
-				<span class="error" v-if="!$v.password.isPasswordStrong && $v.password.$dirty"
-					>Un mot de passe doit contenir au minimum 8 caractères, une majuscule, un
-					chiffre et un caractère spécial.</span
-				>
-			</label>
+				placeholder="Mot de passe"
+				v-model="password"
+			/>
+			<span class="error" v-if="!$v.password.isPasswordStrong && $v.password.$dirty"
+				>Un mot de passe doit contenir au minimum 8 caractères, une majuscule, un chiffre et
+				un caractère spécial.</span
+			>
 
 			<div>
 				<button type="submit" class="connect">
@@ -135,7 +137,7 @@ export default {
 		right: 10px;
 		width: 120px;
 		height: 30px;
-		background: #d15159;
+		background: #b8474e;
 		border: none;
 		border-radius: 5px 5px 0 0;
 		font-size: 11px;
@@ -163,6 +165,9 @@ export default {
 			margin: 25px 0 20px 0;
 			font-weight: 300;
 			font-size: 28px;
+		}
+		.hidden {
+			opacity: 0;
 		}
 		input[type="text"],
 		input[type="email"],
@@ -194,7 +199,7 @@ export default {
 			margin-top: 40px;
 		}
 		.error {
-			color: #d15159;
+			color: #b8474e;
 			font-size: 10px;
 		}
 	}

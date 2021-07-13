@@ -34,8 +34,8 @@ try {
 }
 
 /*APPEL PACKAGES*/
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
 /*APPEL ROUTES*/
 app.use("/images", express.static(path.join(__dirname, "images")));

@@ -1,6 +1,6 @@
 <template>
 	<div class="banner">
-		<img src="../assets/icon-white.png" alt="logo" class="logo-G" />
+		<img src="../assets/icon-white.png" alt="logo-groupomania" class="logo-G" />
 		<div class="text-banner">
 			<h2 class="welcome">Bienvenue {{ user.username | capitalize }} sur le réseau</h2>
 			<h1 class="group">Groupomania</h1>

@@ -11,6 +11,7 @@
 						v-if="user.isadmin == true"
 						@click="deleteUser(user.id)"
 						class="delete-user"
+						aria-label="supprimer"
 					>
 						<i class="fas fa-trash"></i>
 					</button>
@@ -18,10 +19,14 @@
 			</div>
 			<!-- si admin ou auteur -->
 			<div class="action" v-if="post.userId == user.id || user.isadmin == true">
-				<button class="up-post" @click="showForm = !showForm">
+				<button class="up-post" aria-label="envoi" @click="showForm = !showForm">
 					<i class="fas fa-pen"></i>
 				</button>
-				<button class="dlt-post" @click="$emit('delete-post', post.id)">
+				<button
+					class="dlt-post"
+					aria-label="supprimer"
+					@click="$emit('delete-post', post.id)"
+				>
 					<i class="fas fa-trash"></i>
 				</button>
 			</div>
@@ -51,13 +56,13 @@
 			<div class="file-change" v-if="!showForm">
 				<input id="image" type="file" name="image" @change="imageSelected" />
 			</div>
-			<button class="valid-btn" v-if="!showForm">
+			<button class="valid-btn" aria-label="envoi" v-if="!showForm">
 				<i class="fas fa-check"></i>
 			</button>
 
 			<!-- image -->
 			<div class="img-content" v-if="post.image !== 'null'">
-				<img :src="post.image" class="model-file" />
+				<img :src="post.image" class="model-file" alt="image-publication" />
 			</div>
 		</form>
 		<!-- AJOUTER COMMENTAIRE -->
@@ -248,7 +253,8 @@ export default {
 			color: white;
 			font-size: 40px;
 			border-radius: 100%;
-			background-color: #42b983;
+			border: 3px solid #ddd;
+			background-image: linear-gradient(to top, #00ecbc 0%, #42b983 100%);
 			height: 50px;
 			width: 50px;
 			margin: 0 15px 0 15px;
@@ -258,7 +264,7 @@ export default {
 				margin: 0 10px 0 5px;
 			}
 			.delete-user {
-				color: #d15159;
+				color: #b8474e;
 				background-color: none;
 			}
 		}
