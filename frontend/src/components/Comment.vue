@@ -15,18 +15,6 @@
 				/>
 			</form>
 			<div class="comment-action" v-if="comment.userId == user.id || user.isadmin == true">
-				<!-- valider le formulaire -->
-				<button class="valid-com" v-if="!showFormCom" @click="upSubmitCom">
-					<i class="fas fa-check"></i>
-				</button>
-				<!-- fermer le formulaire -->
-				<button class="close-com" v-if="!showFormCom" @click="showFormCom = true">
-					<i class="fas fa-times"></i>
-				</button>
-				<!-- modifier le commentaire -->
-				<button class="up-com" v-if="showFormCom" @click="showFormCom = !showFormCom">
-					<i class="fas fa-pen"></i>
-				</button>
 				<!-- supprimer le commentaire -->
 				<button
 					class="dlt-com"
@@ -90,21 +78,6 @@ export default {
 				.catch(e => {
 					console.log(e);
 				});
-		},
-		//commentaire
-		upSubmitCom(e) {
-			e.preventDefault();
-			const newComment = {
-				id: this.comment.id,
-				userId: this.comment.userId,
-				postId: this.post.id,
-				content: this.comment.content
-			};
-
-			this.$emit("up-comment", newComment);
-
-			this.comment.content = "";
-			this.submitted = true;
 		}
 	},
 	mounted() {

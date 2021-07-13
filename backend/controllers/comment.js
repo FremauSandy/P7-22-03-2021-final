@@ -56,20 +56,14 @@ exports.findAllComments = (req, res, next) => {
 
 /*MODIFIER UN COMMENTAIRE*/
 exports.modifyComment = (req, res, next) => {
-	const id = req.params.id;
-	const modification = req.file
-		? {
-				userId: req.body.userId,
-				postId: req.body.postId,
-				content: req.body.content
-		  }
-		: {
-				userId: req.body.userId,
-				postId: req.body.postId,
-				content: req.body.content
-		  };
+	const commentId = req.params.id;
+	const modification = {
+		userId: req.body.userId,
+		postId: req.body.postId,
+		content: req.body.content
+	};
 	Comment.update(modification, {
-		where: { id: id }
+		where: { id: commentId }
 	})
 		.then(num => {
 			if (num == 1) {
@@ -85,6 +79,9 @@ exports.modifyComment = (req, res, next) => {
 		.catch(err => {
 			res.status(500).send({
 				message: "erreur lors de la mise à jour du commentaire avec l'id=" + id
+			});
+			res.status(401).json({
+				error: "Vous ne disposez pas des droits pour modifier ce commentaire !"
 			});
 		});
 };

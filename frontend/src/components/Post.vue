@@ -64,7 +64,7 @@
 		<Addcomment @add-comment="addComment" />
 		<!-- COMMENTAIRES RESPECTIFS -->
 		<div class="wall-comment" :key="comment.id" v-for="comment in post.Comments">
-			<Comment @delete-comment="deleteComment" @up-comment="upComment" :comment="comment" />
+			<Comment @delete-comment="deleteComment" :comment="comment" />
 		</div>
 	</article>
 </template>
@@ -83,7 +83,7 @@ export default {
 		Addcomment,
 		Comment
 	},
-	emits: ["delete-comment", "add-comment", "up-comment"],
+	emits: ["delete-comment", "add-comment"],
 	data() {
 		return {
 			//utilisateur
@@ -154,8 +154,8 @@ export default {
 		upSubmit(e) {
 			e.preventDefault();
 			const newPost = {
-				userId: this.post.userId,
 				id: this.post.id,
+				userId: this.post.userId,
 				title: this.post.title,
 				content: this.post.content,
 				image: this.post.image
@@ -202,39 +202,6 @@ export default {
 					console.log(res.data);
 				})
 				.catch(error => console.log({ error }));
-		},
-		upComment(comment) {
-			this.submitted = true;
-			let commentId = comment.id;
-			let data = {
-				userId: localStorage.getItem("userId"),
-				username: this.user.username,
-				postId: this.postId,
-				content: comment.content
-			};
-			console.log(data);
-			const token = localStorage.getItem("jwt");
-			axios
-				.put("http://localhost:3000/wall/comments/" + commentId, data, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${token}`
-					}
-				})
-				.then(res => {
-					console.log(res);
-					document.location.reload();
-
-					alert("Votre commentaire à bien été enregistré !");
-				})
-				.catch(error => {
-					console.log(error);
-					if (error.response.status === 401) {
-						console.log(
-							"Vous ne disposez pas des droits nessecaire pour modifier ce commentaire !"
-						);
-					}
-				});
 		},
 		deleteComment(id) {
 			let commentId = id;
