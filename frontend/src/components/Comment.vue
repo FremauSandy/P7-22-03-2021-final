@@ -15,15 +15,19 @@
 				/>
 			</form>
 			<div class="comment-action" v-if="comment.userId == user.id || user.isadmin == true">
-				<!-- <button class="valid-com" v-if="!showFormCom" @click="upComment">
+				<!-- valider le formulaire -->
+				<button class="valid-com" v-if="!showFormCom" @click="upSubmitCom">
 					<i class="fas fa-check"></i>
 				</button>
+				<!-- fermer le formulaire -->
 				<button class="close-com" v-if="!showFormCom" @click="showFormCom = true">
 					<i class="fas fa-times"></i>
-				</button> -->
-				<!-- <button class="up-com" v-if="showFormCom" @click="showFormCom = !showFormCom">
+				</button>
+				<!-- modifier le commentaire -->
+				<button class="up-com" v-if="showFormCom" @click="showFormCom = !showFormCom">
 					<i class="fas fa-pen"></i>
-				</button> -->
+				</button>
+				<!-- supprimer le commentaire -->
 				<button
 					class="dlt-com"
 					v-if="showFormCom"
@@ -67,11 +71,15 @@ export default {
 			},
 			//auteur
 			writeBy: this.comment.user.username,
+			//commentaire
+			commentId: this.comment.id,
 			//envoi
-			showFormCom: true
+			showFormCom: true,
+			submitted: false
 		};
 	},
 	methods: {
+		//utilisateur
 		getUser() {
 			const id = localStorage.getItem("userId");
 			axios
@@ -82,6 +90,21 @@ export default {
 				.catch(e => {
 					console.log(e);
 				});
+		},
+		//commentaire
+		upSubmitCom(e) {
+			e.preventDefault();
+			const newComment = {
+				id: this.comment.id,
+				userId: this.comment.userId,
+				postId: this.post.id,
+				content: this.comment.content
+			};
+
+			this.$emit("up-comment", newComment);
+
+			this.comment.content = "";
+			this.submitted = true;
 		}
 	},
 	mounted() {

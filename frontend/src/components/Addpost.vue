@@ -2,7 +2,7 @@
 	<div class="bloc-new-post">
 		<div class="post-profil">
 			<div class="profil-picture">{{ username | truncate(1) }}</div>
-			<h1>{{ username }}</h1>
+			<h1>{{ username | capitalize }}</h1>
 		</div>
 		<form class="form-post" @submit="onSubmit">
 			<input id="title" type="text" placeholder=" Titre" v-model="post.title" required />
@@ -46,6 +46,11 @@ export default {
 				.slice(0, num)
 				.join("");
 			return reqdString;
+		},
+		capitalize: function(value) {
+			if (!value) return "";
+			value = value.toString();
+			return value.charAt(0).toUpperCase() + value.slice(1);
 		}
 	},
 	methods: {

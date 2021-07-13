@@ -18,53 +18,53 @@
 			</div>
 			<!-- si admin ou auteur -->
 			<div class="action" v-if="post.userId == user.id || user.isadmin == true">
-				<!-- <button class="up-post" @click="showForm = !showForm">
+				<button class="up-post" @click="showForm = !showForm">
 					<i class="fas fa-pen"></i>
-				</button> -->
+				</button>
 				<button class="dlt-post" @click="$emit('delete-post', post.id)">
 					<i class="fas fa-trash"></i>
 				</button>
 			</div>
 		</div>
 		<!-- contenu publication -->
-		<div class="post-content">
+		<form class="post-content" @submit="upSubmit">
 			<!-- titre -->
 			<h2 v-if="showForm">{{ post.title }}</h2>
 			<!-- si changement -->
-			<!-- <input
+			<input
 				class="post-text"
 				v-if="!showForm"
 				placeholder="Titre"
 				type="text"
 				v-model="post.title"
-			/> -->
+			/>
 			<!-- contenu -->
 			<p v-if="showForm">{{ post.content }}</p>
 			<!-- si changement -->
-			<!-- <input
+			<input
 				class="post-text"
 				v-if="!showForm"
 				placeholder="Contenu"
 				type="text"
 				v-model="post.content"
-			/> -->
+			/>
 			<div class="file-change" v-if="!showForm">
 				<input id="image" type="file" name="image" @change="imageSelected" />
 			</div>
-			<!-- <button class="valid-btn" v-if="!showForm">
+			<button class="valid-btn" v-if="!showForm">
 				<i class="fas fa-check"></i>
-			</button> -->
+			</button>
 
 			<!-- image -->
 			<div class="img-content" v-if="post.image !== 'null'">
 				<img :src="post.image" class="model-file" />
 			</div>
-		</div>
+		</form>
 		<!-- AJOUTER COMMENTAIRE -->
 		<Addcomment @add-comment="addComment" />
 		<!-- COMMENTAIRES RESPECTIFS -->
 		<div class="wall-comment" :key="comment.id" v-for="comment in post.Comments">
-			<Comment @delete-comment="deleteComment" :comment="comment" />
+			<Comment @delete-comment="deleteComment" @up-comment="upComment" :comment="comment" />
 		</div>
 	</article>
 </template>
@@ -83,7 +83,7 @@ export default {
 		Addcomment,
 		Comment
 	},
-	emits: ["delete-comment", "add-comment"],
+	emits: ["delete-comment", "add-comment", "up-comment"],
 	data() {
 		return {
 			//utilisateur
@@ -119,7 +119,6 @@ export default {
 	methods: {
 		//utilisateur
 		getUser() {
-			// droits admin ou auteur: permet la suppression des posts
 			const id = localStorage.getItem("userId");
 			axios
 				.get("http://localhost:3000/users/" + id)
@@ -146,6 +145,28 @@ export default {
 					this.$router.push("/users/sign");
 				})
 				.catch(error => console.log(error));
+		},
+		//publications
+		imageSelected(event) {
+			this.post.image = event.target.files[0];
+			console.log(this.post.image);
+		},
+		upSubmit(e) {
+			e.preventDefault();
+			const newPost = {
+				userId: this.post.userId,
+				id: this.post.id,
+				title: this.post.title,
+				content: this.post.content,
+				image: this.post.image
+			};
+
+			this.$emit("up-post", newPost);
+
+			this.post.title = "";
+			this.post.content = "";
+			this.post.image = "";
+			this.submitted = true;
 		},
 		//commentaires
 		addComment(comment) {
@@ -181,6 +202,39 @@ export default {
 					console.log(res.data);
 				})
 				.catch(error => console.log({ error }));
+		},
+		upComment(comment) {
+			this.submitted = true;
+			let commentId = comment.id;
+			let data = {
+				userId: localStorage.getItem("userId"),
+				username: this.user.username,
+				postId: this.postId,
+				content: comment.content
+			};
+			console.log(data);
+			const token = localStorage.getItem("jwt");
+			axios
+				.put("http://localhost:3000/wall/comments/" + commentId, data, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`
+					}
+				})
+				.then(res => {
+					console.log(res);
+					document.location.reload();
+
+					alert("Votre commentaire à bien été enregistré !");
+				})
+				.catch(error => {
+					console.log(error);
+					if (error.response.status === 401) {
+						console.log(
+							"Vous ne disposez pas des droits nessecaire pour modifier ce commentaire !"
+						);
+					}
+				});
 		},
 		deleteComment(id) {
 			let commentId = id;
@@ -350,7 +404,7 @@ export default {
 			text-align: left;
 			background: lightgrey;
 			padding: 15px;
-			width: 80%;
+			width: 85%;
 			height: 21px;
 			border-radius: 3px;
 			margin: 10px 0 10px 0;
@@ -363,6 +417,30 @@ export default {
 				color: #2c3e5d;
 				white-space: nowrap;
 				opacity: 0.3;
+			}
+		}
+		@media (max-width: 900px) {
+			.file-change {
+				width: 80%;
+			}
+			.valid-btn {
+				margin-left: 20px;
+			}
+		}
+		@media (max-width: 740px) {
+			.file-change {
+				width: 75%;
+			}
+			.valid-btn {
+				margin-left: 20px;
+			}
+		}
+		@media (max-width: 440px) {
+			.file-change {
+				width: 70%;
+			}
+			.valid-btn {
+				margin-left: 30px;
 			}
 		}
 	}
