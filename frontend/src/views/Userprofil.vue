@@ -202,6 +202,7 @@ export default {
 		}
 	},
 	mounted() {
+		this.user.userId;
 		this.getUser();
 	}
 };
@@ -229,7 +230,7 @@ export default {
 			flex-direction: row;
 			position: relative;
 			top: -25px;
-			left: 140px;
+			left: 40%;
 			.mark-admin {
 				width: 35px;
 				height: 25px;
@@ -341,9 +342,6 @@ export default {
 		width: 100%;
 		.front {
 			width: 95%;
-			.btn-inner {
-				left: 80px;
-			}
 		}
 	}
 }

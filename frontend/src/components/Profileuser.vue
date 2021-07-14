@@ -234,5 +234,11 @@ export default {
 		justify-content: center;
 		align-items: center;
 	}
+	ul {
+		justify-content: space-between;
+	}
+	.choice-nav {
+		width: 50%;
+	}
 }
 </style>

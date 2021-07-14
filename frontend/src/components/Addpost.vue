@@ -121,18 +121,20 @@ export default {
 		width: 100%;
 		.hidden {
 			opacity: 0;
+			height: 0;
 		}
-		input[type="text"],
-		input[type="textarea"] {
+		#title,
+		#content {
 			border-radius: 20px;
 			border: 1px solid rgba(0, 0, 0, 0.3);
 			width: 90%;
 			margin-bottom: 5px;
+			padding: 5px 0 5px 5px;
 		}
-		input[type="text"] {
+		#title {
 			height: 30px;
 		}
-		input[type="textarea"] {
+		#content {
 			height: 50px;
 		}
 		.file-input {
@@ -140,7 +142,7 @@ export default {
 			text-align: left;
 			background: lightgrey;
 			padding: 15px;
-			width: 90%;
+			width: 85%;
 			height: 21px;
 			border-radius: 3px;
 			margin: 10px 0 10px 0;

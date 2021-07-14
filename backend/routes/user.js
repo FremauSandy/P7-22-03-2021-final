@@ -6,7 +6,6 @@ const router = express.Router();
 const userCtrl = require("../controllers/user");
 const regexCtrl = require("../middleware/regex");
 const authCtrl = require("../middleware/auth");
-const adminOwner = require("../middleware/AdminOwner");
 
 /*APPEL FONCTIONS*/
 //création
@@ -17,8 +16,8 @@ router.post("/log", userCtrl.login);
 router.get("/facts", userCtrl.getAllUsers);
 router.get("/:id", userCtrl.getOneUser);
 //modification
-router.put("/:id", authCtrl, adminOwner, regexCtrl.authValidation, userCtrl.modifyUser);
+router.put("/:id", authCtrl, regexCtrl.authValidation, userCtrl.modifyUser);
 //suppression
-router.delete("/:id", authCtrl, adminOwner, userCtrl.deleteUser);
+router.delete("/:id", authCtrl, userCtrl.deleteUser);
 
 module.exports = router;
