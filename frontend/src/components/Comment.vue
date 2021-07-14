@@ -7,6 +7,7 @@
 			<form class="content">
 				<p class="comment-author">{{ writeBy | capitalize }}</p>
 				<div class="content-comment" v-if="showFormCom">{{ comment.content }}</div>
+				<!-- si changement -->
 				<input
 					class="comment-text"
 					v-if="!showFormCom"
