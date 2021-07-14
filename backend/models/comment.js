@@ -31,6 +31,5 @@ const Comment = db.define("Comment", {
 });
 
 Comment.sync();
-//Comment.sync({ force: true });
 
 module.exports = Comment;

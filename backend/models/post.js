@@ -49,6 +49,5 @@ User.hasMany(Post, { foreignKey: "userId" });
 Post.belongsTo(User, { onDelete: "cascade", hooks: true });
 
 Post.sync();
-//Post.sync({ force: true });
 
 module.exports = Post;
