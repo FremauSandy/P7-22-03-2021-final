@@ -23,7 +23,7 @@
 		<nav>
 			<ul>
 				<li class="choice-nav profil">
-					<router-link :to="{ name: 'Userprofil' }"
+					<router-link :to="{ name: 'Userprofil' }" aria-label="supprimer"
 						><i class="fas fa-user"></i>
 					</router-link>
 				</li>
@@ -88,7 +88,7 @@ export default {
 	text-align: center;
 	position: relative;
 	width: 250px;
-	height: 300px;
+	height: 310px;
 	background-color: white;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	border-radius: 10px;
@@ -103,7 +103,7 @@ export default {
 		width: 90px;
 		border-radius: 50%;
 		border: 5px solid #ddd;
-		background-color: #42b983;
+		background-image: linear-gradient(to top, #00ecbc 0%, #42b983 100%);
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -233,6 +233,12 @@ export default {
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+	}
+	ul {
+		justify-content: space-between;
+	}
+	.choice-nav {
+		width: 50%;
 	}
 }
 </style>

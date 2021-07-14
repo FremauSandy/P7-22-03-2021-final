@@ -2,10 +2,12 @@
 	<div class="bloc-new-post">
 		<div class="post-profil">
 			<div class="profil-picture">{{ username | truncate(1) }}</div>
-			<h1>{{ username }}</h1>
+			<h1>{{ username | capitalize }}</h1>
 		</div>
 		<form class="form-post" @submit="onSubmit">
+			<label for="title" class="hidden">titre</label>
 			<input id="title" type="text" placeholder=" Titre" v-model="post.title" required />
+			<label for="content" class="hidden">contenu</label>
 			<input
 				id="content"
 				type="textarea"
@@ -13,6 +15,7 @@
 				v-model="post.content"
 				required
 			/>
+			<label for="image" class="hidden">image</label>
 			<div class="file-input">
 				<input id="image" type="file" name="image" @change="imageSelected" />
 			</div>
@@ -46,6 +49,11 @@ export default {
 				.slice(0, num)
 				.join("");
 			return reqdString;
+		},
+		capitalize: function(value) {
+			if (!value) return "";
+			value = value.toString();
+			return value.charAt(0).toUpperCase() + value.slice(1);
 		}
 	},
 	methods: {
@@ -93,7 +101,8 @@ export default {
 		.profil-picture {
 			text-align: center;
 			border-radius: 100%;
-			background-color: #42b983;
+			border: 5px solid #ddd;
+			background-image: linear-gradient(to top, #00ecbc 0%, #42b983 100%);
 			color: white;
 			font-size: 40px;
 			height: 50px;
@@ -110,17 +119,22 @@ export default {
 		align-items: center;
 		height: 229px;
 		width: 100%;
-		input[type="text"],
-		input[type="textarea"] {
+		.hidden {
+			opacity: 0;
+			height: 0;
+		}
+		#title,
+		#content {
 			border-radius: 20px;
 			border: 1px solid rgba(0, 0, 0, 0.3);
 			width: 90%;
 			margin-bottom: 5px;
+			padding: 5px 0 5px 5px;
 		}
-		input[type="text"] {
+		#title {
 			height: 30px;
 		}
-		input[type="textarea"] {
+		#content {
 			height: 50px;
 		}
 		.file-input {
@@ -128,7 +142,7 @@ export default {
 			text-align: left;
 			background: lightgrey;
 			padding: 15px;
-			width: 90%;
+			width: 85%;
 			height: 21px;
 			border-radius: 3px;
 			margin: 10px 0 10px 0;

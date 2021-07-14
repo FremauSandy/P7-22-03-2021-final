@@ -16,15 +16,7 @@
 				/>
 			</form>
 			<div class="comment-action" v-if="comment.userId == user.id || user.isadmin == true">
-				<!-- <button class="valid-com" v-if="!showFormCom" @click="upComment">
-					<i class="fas fa-check"></i>
-				</button>
-				<button class="close-com" v-if="!showFormCom" @click="showFormCom = true">
-					<i class="fas fa-times"></i>
-				</button> -->
-				<!-- <button class="up-com" v-if="showFormCom" @click="showFormCom = !showFormCom">
-					<i class="fas fa-pen"></i>
-				</button> -->
+				<!-- supprimer le commentaire -->
 				<button
 					class="dlt-com"
 					v-if="showFormCom"
@@ -68,11 +60,15 @@ export default {
 			},
 			//auteur
 			writeBy: this.comment.user.username,
+			//commentaire
+			commentId: this.comment.id,
 			//envoi
-			showFormCom: true
+			showFormCom: true,
+			submitted: false
 		};
 	},
 	methods: {
+		//utilisateur
 		getUser() {
 			const id = localStorage.getItem("userId");
 			axios

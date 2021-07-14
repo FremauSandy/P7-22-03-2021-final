@@ -4,7 +4,9 @@
 		<div class="add-content-com">
 			<!-- auteur  -->
 			<div class="user-picture-com">{{ username | truncate(1) }}</div>
+			<label for="text" class="hidden">text</label>
 			<input
+				id="text"
 				type="text"
 				class="add-commentary"
 				placeholder="Souhaitez vous ajouter un commentaire ?"
@@ -12,7 +14,7 @@
 				required
 			/>
 			<!-- envoi  -->
-			<button type="submit" class="btn-valid">
+			<button type="submit" class="btn-valid" aria-label="envoi">
 				<i class="fas fa-check"></i>
 			</button>
 		</div>
@@ -84,12 +86,16 @@ export default {
 			justify-content: center;
 			align-items: center;
 			border-radius: 100%;
-			background-color: #42b983;
+			border: 3px solid #ddd;
+			background-image: linear-gradient(to top, #00ecbc 0%, #42b983 100%);
 			color: white;
 			height: 40px;
 			width: 40px;
 			font-size: 18px;
 			margin: 0 15px 0 15px;
+		}
+		.hidden {
+			opacity: 0;
 		}
 		.add-commentary {
 			background-color: lightgray;

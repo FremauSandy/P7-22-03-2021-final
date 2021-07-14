@@ -65,7 +65,6 @@ exports.getAllUsers = (req, res, next) => {
 exports.getOneUser = (req, res, next) => {
 	User.findOne({
 		where: { id: req.params.id }
-		//include: Post  recherche des posts propres à l'utilsateur
 	})
 		.then(user => res.status(200).json(user))
 		.catch(error => res.status(404).json({ error }));
@@ -73,21 +72,14 @@ exports.getOneUser = (req, res, next) => {
 /*MODIFIER UN UTILISATEUR*/
 exports.modifyUser = (req, res, next) => {
 	bcrypt.hash(req.body.password, 10).then(hash => {
-		const id = req.params.id;
-		const newProfile = req.body
-			? {
-					username: req.body.username,
-					email: req.body.email,
-					password: hash
-			  }
-			: {
-					username: req.body.username,
-					email: req.body.email,
-					password: hash
-			  };
-
+		const userId = req.params.id;
+		const newProfile = {
+			username: req.body.username,
+			email: req.body.email,
+			password: hash
+		};
 		User.update(newProfile, {
-			where: { id: id }
+			where: { id: userId }
 		})
 			.then(num => {
 				if (num == 1) {
@@ -103,6 +95,9 @@ exports.modifyUser = (req, res, next) => {
 			.catch(err => {
 				res.status(500).send({
 					message: "Erreur lors de la mise à jour id=" + id
+				});
+				res.status(401).json({
+					error: "Vous ne disposez pas des droits pour modifier cet utilisateur !"
 				});
 			});
 	});

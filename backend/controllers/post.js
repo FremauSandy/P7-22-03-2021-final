@@ -70,9 +70,8 @@ exports.modifyPost = (req, res, next) => {
 	} else {
 		Post.findOne({ where: { id: req.params.id }, include: [User] })
 			.then(post => {
-				console.log(req.params.id); // ok
+				console.log(req.params.id);
 				if (post.userId === post.user.id) {
-					// a corriger
 					const postObject = req.file
 						? {
 								...req.body.post,

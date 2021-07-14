@@ -11,6 +11,7 @@
 						v-if="user.isadmin == true"
 						@click="deleteUser(user.id)"
 						class="delete-user"
+						aria-label="supprimer"
 					>
 						<i class="fas fa-trash"></i>
 					</button>
@@ -18,48 +19,52 @@
 			</div>
 			<!-- si admin ou auteur -->
 			<div class="action" v-if="post.userId == user.id || user.isadmin == true">
-				<!-- <button class="up-post" @click="showForm = !showForm">
+				<button class="up-post" aria-label="envoi" @click="showForm = !showForm">
 					<i class="fas fa-pen"></i>
-				</button> -->
-				<button class="dlt-post" @click="$emit('delete-post', post.id)">
+				</button>
+				<button
+					class="dlt-post"
+					aria-label="supprimer"
+					@click="$emit('delete-post', post.id)"
+				>
 					<i class="fas fa-trash"></i>
 				</button>
 			</div>
 		</div>
 		<!-- contenu publication -->
-		<div class="post-content">
+		<form class="post-content" @submit="upSubmit">
 			<!-- titre -->
 			<h2 v-if="showForm">{{ post.title }}</h2>
 			<!-- si changement -->
-			<!-- <input
+			<input
 				class="post-text"
 				v-if="!showForm"
 				placeholder="Titre"
 				type="text"
 				v-model="post.title"
-			/> -->
+			/>
 			<!-- contenu -->
 			<p v-if="showForm">{{ post.content }}</p>
 			<!-- si changement -->
-			<!-- <input
+			<input
 				class="post-text"
 				v-if="!showForm"
 				placeholder="Contenu"
 				type="text"
 				v-model="post.content"
-			/> -->
+			/>
 			<div class="file-change" v-if="!showForm">
 				<input id="image" type="file" name="image" @change="imageSelected" />
 			</div>
-			<!-- <button class="valid-btn" v-if="!showForm">
+			<button class="valid-btn" aria-label="envoi" v-if="!showForm">
 				<i class="fas fa-check"></i>
-			</button> -->
+			</button>
 
 			<!-- image -->
 			<div class="img-content" v-if="post.image !== 'null'">
-				<img :src="post.image" class="model-file" />
+				<img :src="post.image" class="model-file" alt="image-publication" />
 			</div>
-		</div>
+		</form>
 		<!-- AJOUTER COMMENTAIRE -->
 		<Addcomment @add-comment="addComment" />
 		<!-- COMMENTAIRES RESPECTIFS -->
@@ -119,7 +124,6 @@ export default {
 	methods: {
 		//utilisateur
 		getUser() {
-			// droits admin ou auteur: permet la suppression des posts
 			const id = localStorage.getItem("userId");
 			axios
 				.get("http://localhost:3000/users/" + id)
@@ -146,6 +150,28 @@ export default {
 					this.$router.push("/users/sign");
 				})
 				.catch(error => console.log(error));
+		},
+		//publications
+		imageSelected(event) {
+			this.post.image = event.target.files[0];
+			console.log(this.post.image);
+		},
+		upSubmit(e) {
+			e.preventDefault();
+			const newPost = {
+				id: this.post.id,
+				userId: this.post.userId,
+				title: this.post.title,
+				content: this.post.content,
+				image: this.post.image
+			};
+
+			this.$emit("up-post", newPost);
+
+			this.post.title = "";
+			this.post.content = "";
+			this.post.image = "";
+			this.submitted = true;
 		},
 		//commentaires
 		addComment(comment) {
@@ -227,7 +253,8 @@ export default {
 			color: white;
 			font-size: 40px;
 			border-radius: 100%;
-			background-color: #42b983;
+			border: 3px solid #ddd;
+			background-image: linear-gradient(to top, #00ecbc 0%, #42b983 100%);
 			height: 50px;
 			width: 50px;
 			margin: 0 15px 0 15px;
@@ -237,7 +264,7 @@ export default {
 				margin: 0 10px 0 5px;
 			}
 			.delete-user {
-				color: #d15159;
+				color: #b8474e;
 				background-color: none;
 			}
 		}
@@ -350,7 +377,7 @@ export default {
 			text-align: left;
 			background: lightgrey;
 			padding: 15px;
-			width: 80%;
+			width: 85%;
 			height: 21px;
 			border-radius: 3px;
 			margin: 10px 0 10px 0;
@@ -363,6 +390,30 @@ export default {
 				color: #2c3e5d;
 				white-space: nowrap;
 				opacity: 0.3;
+			}
+		}
+		@media (max-width: 900px) {
+			.file-change {
+				width: 80%;
+			}
+			.valid-btn {
+				margin-left: 20px;
+			}
+		}
+		@media (max-width: 740px) {
+			.file-change {
+				width: 75%;
+			}
+			.valid-btn {
+				margin-left: 20px;
+			}
+		}
+		@media (max-width: 440px) {
+			.file-change {
+				width: 70%;
+			}
+			.valid-btn {
+				margin-left: 30px;
 			}
 		}
 	}

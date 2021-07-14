@@ -4,32 +4,32 @@
 
 		<form class="right" v-on:submit.prevent="login()">
 			<h1 class="connect-title">Se connecter</h1>
-			<label for="email">
-				<input
-					type="email"
-					name="email"
-					placeholder="E-mail"
-					v-model="email"
-					title="Veuillez renseigner une adresse valide"
-				/>
-				<span
-					class="error"
-					v-if="(!$v.email.required || !$v.email.email) && $v.email.$dirty && submited"
-					>Veuillez saisir un email valide !</span
-				>
-			</label>
-			<label for="password">
-				<input
-					type="password"
-					name="password"
-					placeholder="Mot de passe"
-					v-model="password"
-					title="Veuillez renseigner un mot de passe valide"
-				/>
-				<span class="error" v-if="!$v.password.required && $v.password.$dirty && submited"
-					>Veuillez saisir votre mot de passe
-				</span>
-			</label>
+			<label for="email" class="hidden">email</label>
+			<input
+				id="email"
+				type="email"
+				name="email"
+				placeholder="E-mail"
+				v-model="email"
+				title="Veuillez renseigner une adresse valide"
+			/>
+			<span
+				class="error"
+				v-if="(!$v.email.required || !$v.email.email) && $v.email.$dirty && submited"
+				>Veuillez saisir un email valide !</span
+			>
+			<label for="password" class="hidden">password</label>
+			<input
+				id="password"
+				type="password"
+				name="password"
+				placeholder="Mot de passe"
+				v-model="password"
+				title="Veuillez renseigner un mot de passe valide"
+			/>
+			<span class="error" v-if="!$v.password.required && $v.password.$dirty && submited"
+				>Veuillez saisir votre mot de passe
+			</span>
 			<span class="connection-error" v-if="idPassError == true"
 				>Votre identifiant ou mot de passe est incorrect
 			</span>
@@ -127,7 +127,7 @@ export default {
 		right: 10px;
 		width: 120px;
 		height: 30px;
-		background: #d15159;
+		background: #b8474e;
 		border: none;
 		border-radius: 5px 5px 0 0;
 		font-size: 11px;
@@ -154,6 +154,9 @@ export default {
 			color: black;
 			font-weight: 300;
 			font-size: 28px;
+		}
+		.hidden {
+			opacity: 0;
 		}
 		input[type="email"],
 		input[type="password"] {
@@ -186,7 +189,7 @@ export default {
 	}
 	.connection-error,
 	.error {
-		color: #d15159;
+		color: #b8474e;
 		font-size: 10px;
 	}
 }

@@ -10,7 +10,12 @@
 			Soyer le premier a publier !
 		</span>
 		<div class="wall-post" :key="post.id" v-for="post in posts">
-			<Post @delete-post="deletePost" @image-select="imageSelect" :post="post" />
+			<Post
+				@delete-post="deletePost"
+				@image-select="imageSelect"
+				@up-post="upPost"
+				:post="post"
+			/>
 		</div>
 
 		<Footer />
@@ -37,17 +42,20 @@ export default {
 	props: {
 		post: Object
 	},
-	emits: ["add-post", "delete-post", "image-select"],
+	emits: ["add-post", "delete-post", "image-select", "up-post"],
 	data() {
 		return {
+			//utilisateur
 			user: {
 				userId: localStorage.getItem("userId"),
 				username: localStorage.getItem("username"),
 				isadmin: localStorage.getItem("isAdmin")
 			},
+			userId: localStorage.getItem("userId"),
+			//publication
 			posts: [],
-			emptyWall: true,
-			userId: localStorage.getItem("userId")
+			//wall
+			emptyWall: true
 		};
 	},
 	methods: {
@@ -113,6 +121,36 @@ export default {
 				})
 				.catch(error => console.log(error.response));
 		},
+		upPost(post) {
+			this.submitted = true;
+			let postId = post.id;
+			const formData = new FormData();
+			formData.append("userId", this.userId);
+			formData.append("title", post.title);
+			formData.append("content", post.content);
+			formData.append("image", post.image);
+			const token = localStorage.getItem("jwt");
+			axios
+				.put("http://localhost:3000/wall/posts/" + postId, formData, {
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${token}`
+					}
+				})
+				.then(res => {
+					console.log(res);
+					alert("Votre publication à bien été enregistrée !");
+					document.location.reload();
+				})
+				.catch(error => {
+					console.log(error.response);
+					if (error.response.status === 401) {
+						console.log(
+							"Vous ne disposez pas des droits néssecaire pour modifier cette publication !"
+						);
+					}
+				});
+		},
 		deletePost(id) {
 			let postId = id;
 			const token = localStorage.getItem("jwt");
@@ -128,7 +166,7 @@ export default {
 					if (this.posts.length == 0) {
 						this.emptyWall = true;
 					}
-					document.location.reload(); // changer push dans tab posts
+					document.location.reload();
 				})
 				.catch(error => console.log(error));
 		}

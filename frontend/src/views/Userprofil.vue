@@ -9,11 +9,11 @@
 					<i class="fas fa-crown"></i>
 				</div>
 				<!-- modification infos user -->
-				<button class="edit-btn" @click="showForm = !showForm">
+				<button class="edit-btn" aria-label="editer" @click="showForm = !showForm">
 					<i class="fas fa-pen"></i>
 				</button>
 				<!-- suppression compte -->
-				<button @click="deleteUser(user.id)" class="delete-btn">
+				<button aria-label="supprimer" @click="deleteUser(user.id)" class="delete-btn">
 					<i class="fas fa-trash"></i>
 				</button>
 			</div>
@@ -121,6 +121,7 @@ export default {
 				userId: localStorage.getItem("userId"),
 				email: localStorage.getItem("email")
 			},
+			userId: localStorage.getItem("userId"),
 			//form user par défaut
 			username: "",
 			email: "",
@@ -142,11 +143,12 @@ export default {
 	},
 	methods: {
 		getUser() {
-			const id = localStorage.getItem("userId");
+			const id = this.userId;
 			axios
 				.get("http://localhost:3000/users/" + id)
 				.then(res => {
 					this.user = res.data;
+					console.log(res.data);
 				})
 				.catch(e => {
 					console.log(e);
@@ -181,8 +183,8 @@ export default {
 					});
 			}
 		},
-		deleteUser() {
-			const userId = localStorage.getItem("userId");
+		deleteUser(id) {
+			const userId = id;
 			const token = localStorage.getItem("jwt");
 			axios
 				.delete("http://localhost:3000/users/" + userId, {
@@ -200,6 +202,7 @@ export default {
 		}
 	},
 	mounted() {
+		this.user.userId;
 		this.getUser();
 	}
 };
@@ -227,7 +230,7 @@ export default {
 			flex-direction: row;
 			position: relative;
 			top: -25px;
-			left: 140px;
+			left: 40%;
 			.mark-admin {
 				width: 35px;
 				height: 25px;
@@ -272,7 +275,7 @@ export default {
 			width: 90px;
 			border-radius: 50%;
 			border: 5px solid lightgray;
-			background-color: #42b983;
+			background-image: linear-gradient(to top, #00ecbc 0%, #42b983 100%);
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -339,9 +342,6 @@ export default {
 		width: 100%;
 		.front {
 			width: 95%;
-			.btn-inner {
-				left: 80px;
-			}
 		}
 	}
 }
